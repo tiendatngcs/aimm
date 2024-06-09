@@ -1,0 +1,18 @@
+
+-------------------------------------------------------------
+Display Stats:
+-------------------------------------------------------------
+frames_used : 9978.000000
+memory_requested(GB) : 0.038150
+memory_used(GB) : 0.038066
+num_pages_swapped_out : 0.000000
+page_fault : 6257.000000
+page_hit : 22.000000
+page_miss_make_entry : 9978.000000
+page_replacement : 0.000000
+swapped_out_and_in_again : 0.000000
+total_L0_tables_created : 2.000000
+total_L1_tables_created : 2.000000
+total_L2_tables_created : 8.000000
+total_L3_tables_created : 3721.000000
+total_memory_acc : 10000.000000

@@ -1,0 +1,21 @@
+CXX=g++ -std=c++11 -ggdb
+
+all: test_static test_dynamic
+
+test_dynamic: test.o libv2p.so
+	$(CXX) -L. -Wl,-rpath=. -Wall -o test_dynamic test.o -lv2p 
+
+test_static: test.o libv2p.a
+	$(CXX) $^ -o $@ 
+
+libv2p.a: v2p.o
+	ar rcs $@ $^
+
+libv2p.so: v2p.cpp v2p.hpp
+	$(CXX) -fPIC -c v2p.cpp -o v2p.o
+	#$(CXX) -shared -WL,-soname,libv2p.so -o libv2p.so v2p.o
+	$(CXX) -shared -Wall -o libv2p.so v2p.o
+
+clean:
+	rm -f *.o *~ *.so *.a .v2p.*.swp .v2p*.swn
+	rm -f test_* *.log 

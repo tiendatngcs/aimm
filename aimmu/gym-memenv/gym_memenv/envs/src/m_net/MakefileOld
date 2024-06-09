@@ -1,0 +1,21 @@
+CXX=g++ -std=c++11 -ggdb -openmp
+
+all: test_static test_dynamic
+
+test_dynamic: test.o libm_net.so
+	$(CXX) -L. -Wl,-rpath=. -Wall -o test_dynamic test.o -lm_net 
+
+test_static: test.o libm_net.a
+	$(CXX) $^ -o $@ 
+
+libm_net.a: m_net.o
+	ar rcs $@ $^
+
+libm_net.so: m_net.cpp m_net.hpp
+	$(CXX) -fPIC -c m_net.cpp -o m_net.o
+	#$(CXX) -shared -WL,-soname,libm_net.so -o libm_net.so m_net.o
+	$(CXX) -shared -Wall -o libm_net.so m_net.o
+
+clean:
+	rm -f *.o *~ *.so *.a .m_net.*.swp .m_net*.swn
+	rm -f test_* *.log 

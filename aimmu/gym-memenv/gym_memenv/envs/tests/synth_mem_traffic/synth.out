@@ -1,0 +1,13 @@
+b0:
+0, non, -1
+1, non, 0 //dependent on 0-inst
+2, glb(disc), -1
+3, st(cont), 2
+4, hp(cont), 2
+5, hp(0, stride), -1 //0-> allocation id
+6, hp(1, stride), -1
+7, hp(2, stride), -1
+8, hp(0, stride), -1
+9, non, 8
+
+

@@ -1,0 +1,60 @@
+----------------------
+*** AI-MMU Project ***
+----------------------
+
+Project Description:
+--------------------
+The full form of AI-MMU is Artificially Intelligent Memory Management Unit. 
+The project aims to design an intelligent memory management system with the 
+help of Reinforcement Learning, which can manage page-frame mapping in any 
+large scale unified memory network efficiently. We target to achieve the 
+optimum performance multi-programmed workloads, which is a superset of single
+program workload. Each of the programs can either be multi-threaded or single-
+threaded. Target applications will be able to receive the maximum benefit if
+they have repeatitative executions, or very long execution time exhibiting 
+large memory footpring and working set size. However, AI-MMu is not limited 
+to only those kind of applications, as it is a very generic approach to support
+any kind of applications in any volume. 
+
+-----------
+Compilers:
+-----------
+Python 3.6.0
+GCC 4.8.5 or higher
+
+-----------
+Tools Used:
+-----------
+1. tensorflow == 1.13.1
+1. keras-rl (any should be fine)
+2. gym == 0.17.1
+3. aimmu-sim (in-house)
+
+-----------------------------
+Setup suggestions/directions:
+-----------------------------
+-> clone the git repo aimmu_project from github.tamu.edu (it is a private project)
+-> make sure you create your own brnach first and work and make changes only in your branch 
+-> download the python-3.6.0 source folder in your local directory (outside of the project)
+-> create virtual environment using venv and activate using "source /path/.../Python-3.6.0/virtual_env/bin/activate"
+-> install pip in your system
+-> using "pip install package==version" //install the required packages
+-> once you have the packages make sure you have following folder structure
+	-> aimmu_project
+	   -> aimmu
+	   -> trace_folder (remove .demo extensions from the trace file, only for the first time)
+	-> don't worry about rest of the folder structure as you would have already received from github
+-> go to aimmu_project/aimmu/gym-memenv 
+	-> pip install -e . //execute this command and it will create the mem environment (gym)
+-> go to aimmu_project/aimmu/gym-memenv/gym_memenv/envs (this is our main working folder)
+	-> change the path to your Python-3.6 virtual environment active script 
+	-> then source set_env //setting up python environment
+-> for run commands check the "runall.sh" file
+
+-----------------
+Test run command: 
+-----------------
+To check if your configuration and setup is ready, you can run the following command
+
+python simulate.py --aimmu-config setup/kmeans_learning.cfg --replay-buff-sz 10000
+

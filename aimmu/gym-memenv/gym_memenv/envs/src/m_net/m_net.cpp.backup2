@@ -1,0 +1,978 @@
+#include "m_net.hpp"
+#include <bits/stdc++.h>
+#include <vector>
+#include <math.h>
+
+node::node(const Configuration& config){
+  _max_entry_vc_r_s = config.GetInt("pkt_buffer_per_vc");
+  max_entry_resp_q = config.GetInt("resp_q_size");
+  num_vaults = config.GetInt("num_vaults");
+  num_banks_per_vault = config.GetInt("banks_per_vault");
+  mem_row_hit_lat = config.GetInt("mem_row_hit_lat");
+  mem_row_miss_lat = config.GetInt("mem_row_miss_lat");
+  max_entry_mem_cube = num_vaults * num_banks_per_vault;
+  x_dim = config.GetInt("x_dim");
+  y_dim = config.GetInt("y_dim");
+  
+  _router_radix = config.GetInt("router_radix");
+  _num_vnet = config.GetInt("num_vnet");
+  _pim_tab_size =  config.GetInt("pim_tab_size");
+
+  _num_pim_entries = 0;//keeps track of exact entries made
+  _pim_tab_occupancy = 0;//keeps track of reserved + actual entries
+
+  req_q.resize(_router_radix+1);
+  resp_q.resize(_router_radix+1);
+
+  for(int i=0; i<=_router_radix; i++){
+    vc_r_s.push_back(deque<packet *>());
+    vc_r_s_resp.push_back(deque<packet *>());
+    req_q[i]=0;
+    resp_q[i]=0;
+  }
+
+
+  row_buff.resize(num_vaults);
+  for(int i=0;i<num_vaults;i++){
+    row_buff[i].resize(num_banks_per_vault);
+  }
+  pim_tab_index = 0;
+}
+
+int node::return_vc_r_s_size(int vnet, int port){
+  if(vnet==0){
+    return vc_r_s[port].size();
+  }
+  else if(vnet==1){
+    return vc_r_s_resp[port].size();
+  }
+  else{
+    assert(0 && "[MNET] *** wrong vnet ***");
+  }
+}
+
+int node::return_vc_req_NI_buff_size(int NI_id){
+  if(NI_id==0){
+    return vc_r_s[5].size();
+  }
+  else if(NI_id==1){
+    return vc_r_s[6].size();
+  }
+  else{
+    assert(0 && "*** invalid NI id ***");
+  }
+}
+
+void node::inject_vc_r_s(int from_node, packet *pkt, int NI_id){
+  int port = -1;
+  switch(NI_id){
+    case 0:
+      port = 5;
+      break;
+    
+    case 1:
+      port = 6;
+      break;
+
+    default:
+      assert(0 && "*** wrong NI id ***");
+  }
+  if(pkt->needs_resp==true || pkt->migration_pkt==true){
+    vc_r_s[port].push_back(pkt);
+    req_q[port]++;
+    //cout<<"packet pushed: "<<vc_r_s[port].front()->id<<endl;
+  }
+  else{
+    vc_r_s_resp[port].push_back(pkt);
+    resp_q[port]++;
+  }
+#ifdef DEBUG_PRINT_MNET
+      fprintf(debugfile, "%lu | [node:%d] injecting packet %ld at port %d occupancy[%d|%d]\n"
+        ,global_clock,id,pkt->id, port, req_q[port], resp_q[port]);
+#endif        
+}
+
+void node::make_entry_vc_r_s(int from_node, packet *pkt){
+  int port = get_inport(from_node, pkt->src);
+  if(pkt->needs_resp==true || pkt->migration_pkt==true){
+    vc_r_s[port].push_back(pkt);
+    req_q[port]++;
+    //cout<<"packet pushed: "<<vc_r_s[port].front()->id<<endl;
+  }
+  else{
+    vc_r_s_resp[port].push_back(pkt);
+    resp_q[port]++;
+  }
+#ifdef DEBUG_PRINT_MNET
+      fprintf(debugfile, "%lu | [node:%d] received packet %ld at port %d\n"
+        ,global_clock,id,pkt->id, port);
+#endif        
+}
+
+packet * node::read_front_pkt(int port, int vnet){ //loop will be invoked for (req+resp).size
+  packet *pkt = NULL;
+  if(vnet==0){
+    if(req_q[port]>0){
+      pkt = vc_r_s[port].front();
+      assert(pkt!=NULL);
+      //cout<<" "<<global_clock<<" | packet: "<<pkt->id<<" port; "<<
+        //port<<endl;
+#ifdef DEBUG_PRINT_MNET
+      fprintf(debugfile, "%lu | [node:%d] reading front packet %ld at port %d [src:%d|dest:%lld]\n"
+        ,global_clock,id, pkt->id, port, pkt->src, pkt->dest);
+#endif        
+    }
+  }
+  else{
+    if(resp_q[port]>0)
+      pkt = vc_r_s_resp[port].front();
+  }
+  return pkt;
+}//can read first four packets 
+    
+bool node::can_receive_pkt(int from_node, packet *pkt){
+  int port = get_inport(from_node, pkt->src);//this is correctly getting inport
+  bool can_receive = false;
+  bool can_inject_pim = true;
+  assert(port<5 && port>=0);
+  if(pkt->needs_resp || pkt->migration_pkt){
+    if(req_q[port]==0){
+      return true;
+    }
+    can_receive  = ((vc_r_s[port].size() < _max_entry_vc_r_s));
+    //can_inject_pim = return_num_pim_entries_reserved() < _pim_tab_size/2;
+    //if(id == pkt->dest && pkt->make_entry_pim_table){
+    //  can_receive = can_receive && can_inject_pim;
+    //}
+    return can_receive;
+  }
+  else{
+    if(resp_q[port]==0){
+      return true;
+    }
+    can_receive = ((vc_r_s_resp[port].size() < _max_entry_vc_r_s));
+    return can_receive;
+  }
+}//for sending packet
+
+void node::pop_front_pkt(int port, packet *pkt){
+  if(pkt->needs_resp || pkt->migration_pkt){
+#ifdef DEBUG_PRINT_MNET
+    if(pkt->id != vc_r_s[port].front()->id){
+      fprintf(debugfile, "%lu | [node:%d] ***ERROR POP REQ*** packet %ld at port %d | front packet: %ld\n"
+        ,global_clock,id, pkt->id, port, vc_r_s[port].front()->id);
+    }
+#endif        
+    assert(pkt->id == vc_r_s[port].front()->id);
+    vc_r_s[port].pop_front();
+    req_q[port]--;
+#ifdef DEBUG_PRINT_MNET
+    fprintf(debugfile, "%lu | [node:%d] poping front request packet %ld at port %d [src:%d|dest:%lld]\n"
+      ,global_clock,id, pkt->id, port, pkt->src, pkt->dest);
+#endif        
+    assert(req_q[port]>=0);
+  }
+  else{
+#ifdef DEBUG_PRINT_MNET
+    if(pkt->id != vc_r_s_resp[port].front()->id){
+      fprintf(debugfile, "%lu | [node:%d] ***ERROR POP RESP*** packet %ld at port %d | front packet: %ld\n"
+        ,global_clock,id, pkt->id, port, vc_r_s_resp[port].front()->id);
+    }
+#endif        
+    assert(pkt->id == vc_r_s_resp[port].front()->id);
+    vc_r_s_resp[port].pop_front();
+    resp_q[port]--;
+#ifdef DEBUG_PRINT_MNET
+    fprintf(debugfile, "%lu | [node:%d] poping front response packet %ld at port %d [src:%d|dest:%lld]\n"
+      ,global_clock,id, pkt->id, port, pkt->src, pkt->dest);
+#endif        
+    assert(resp_q[port]>=0);
+  }
+}
+
+int node::get_inport(int from_node, int src){
+  int curr = id;
+  int dest = from_node;
+  int inport = -1;
+  int src_row = curr / x_dim;
+  int dest_row = dest / x_dim;
+  int src_col = curr % y_dim;
+  int dest_col = dest % y_dim;
+
+  if(curr==src){//injection
+    inport = 5;
+  }
+  else if(curr==dest){//destination
+    inport = 4;//injection port
+  }
+  else{
+    if(src_col == dest_col){
+      if(src_row > dest_row){
+        //go_up = true;
+        inport = 0;
+      }
+      else{
+        //go_down = true;
+        inport = 1;
+      }
+    }
+    else{
+      if(src_col > dest_col){
+        //go_left = true;
+        inport = 2;
+      }
+      else{
+        //go_right = true;
+        inport = 3;
+      }
+    }
+  }
+  assert(inport!=-1);
+  //cout<<"curr: "<<curr<<" dest: "<<dest<<" inport: "<<inport<<" for: "<<curr<<endl;
+  return inport;
+}  
+
+int node::return_vc_buff_size(int vnet, int port){
+  if(vnet==0){
+    return req_q[port];
+  }
+  else{
+    return resp_q[port];
+  }
+}
+/////////////////////////////////////////////////////////////////
+//////////////////// NODE END ///////////////////////////////////
+/////////////////////////////////////////////////////////////////
+MemoryNetwork * MemoryNetwork::_mnet = NULL;
+
+MemoryNetwork::~MemoryNetwork(){}
+
+MemoryNetwork::MemoryNetwork(const Configuration &config){
+  create_network(config);
+}
+
+bool MemoryNetwork::can_inject(int node, packet *pkt, int NI_id){
+  bool can_inject = false;
+  bool can_inject_pim = false;
+  if(pkt->pim_operation){
+    can_inject = (node_list[node].return_vc_req_NI_buff_size(NI_id) 
+      < node_list[node].return_max_entry_vc_r_s());  
+    can_inject_pim = node_list[pkt->dest].return_num_pim_entries_reserved() < _pim_tab_size/2;
+    if(can_inject_pim!=true){
+      stats_pim_tab_full_hist[pkt->dest]++;//only failed because of table size 
+    }
+    stats_pim_dest_hist[pkt->dest]++;//failed + succeed
+    //stats_pim_full_rate_hist[pkt->dest] = stats_pim_tab_full_hist[pkt->dest] / stats_pim_dest_hist[pkt->dest];
+    stats_pim_full_rate_hist[pkt->dest] = stats_pim_dest_hist[pkt->dest] / stats_pim_operations;
+    
+    return can_inject && can_inject_pim;
+  }
+  else{
+    return (node_list[node].return_vc_req_NI_buff_size(NI_id) 
+      < node_list[node].return_max_entry_vc_r_s()); 
+  }
+}
+
+void MemoryNetwork::create_network(const Configuration& config){
+
+  router_stages = config.GetInt("router_stages");
+  mem_acc_lat = config.GetInt("mem_acc_lat");
+  x_dim = config.GetInt("x_dim");
+  y_dim = config.GetInt("y_dim");
+  _router_radix_mnet = config.GetInt("router_radix");
+  _num_vnet_mnet = config.GetInt("num_vnet");
+  size_per_node = config.GetInt("mem_size") / (double)(x_dim * y_dim); 
+  num_nodes = x_dim * y_dim;
+  _frame_size =  config.GetInt("page_size");
+  _tot_frame_per_cube = size_per_node * 1024 * 1024;  
+  _run_baseline = (config.GetInt("dis_training")>=1);
+
+  vector<int> tmp = config.GetIntArray("port_positions");
+  mem_ports = (int *)malloc(tmp.size() * sizeof(int));
+  std::copy(tmp.begin(), tmp.end(), mem_ports);
+  
+  adj.resize(num_nodes*num_nodes);
+  node_list.resize(num_nodes, node(config));
+
+  string topo_file_name =  config.GetStr("topology") + ".ini";
+  cout<<" "<<topo_file_name<<endl;
+  read_topology(topo_file_name);
+
+  _pim_tab_size =  config.GetInt("pim_tab_size");
+  
+  fprintf(debugfile,"\n===== Printing Network Adjecency List ====== \n");
+  for(int i=0;i<num_nodes;i++){
+    node_list[i].pim_entry_tab = new pim_entry[_pim_tab_size];
+    node_list[i].id = i;
+    fprintf(debugfile,"%d | ",i);
+    for(int j=0;j<(int)adj[i].size();j++){
+      fprintf(debugfile,"%d ",adj[i][j]);
+    }
+    fprintf(debugfile,"\n");
+  }
+  fprintf(debugfile,"\n");
+  //create_stat_vars();
+}
+
+void MemoryNetwork::read_topology(string filename){
+  cout<<"reading topology ...from "<<filename<<endl;
+  ifstream file(filename.c_str());
+  assert(file!=NULL);
+  string temp_str;
+  int node_num=0;
+  int iL;
+  while(getline(file, temp_str)){
+    stringstream ss(temp_str); 
+    while(ss >> iL){
+      adj[node_num].push_back(iL); 
+      if(ss.peek()==',' || ss.peek()==' '){
+        ss.ignore();
+      }
+    }
+  node_num++;  
+  }
+  cout<<endl;
+}
+
+int MemoryNetwork::addr_to_nodeNum_conv(unsigned long long addr){
+  unsigned long frame_num = addr >> int(log2(_frame_size * 1024));
+  int cube_id = (frame_num - (frame_num% _tot_frame_per_cube))/(_tot_frame_per_cube+1);
+  return cube_id;
+}
+
+
+void MemoryNetwork::step(){
+  for(int node=0;node<num_nodes;node++){
+    if((unsigned long)stats_total_retry_cycles%100000==0 && (unsigned long)stats_total_retry_cycles!=0){
+      if(node==0){
+        cout<<"\n\n[(node 0 | pim occ: "<<node_list[node].return_num_pim_entries_reserved()<<") ";
+      }
+      else {
+        cout<<"(node "<<node<<" | pim occ: "<<node_list[node].return_num_pim_entries_reserved()<<") ";
+      }
+    }
+    evaluate(node);
+  }
+  for(int node=0;node<num_nodes;node++){
+    retire(node);
+  }
+}
+
+
+int MemoryNetwork::mesh_neighbor_closer_to_dest(int curr, int dest){
+  int min = INT_MAX;
+  int next = -1;
+  int src_row = curr / x_dim;
+  int dest_row = dest / x_dim;
+  int src_col = curr % x_dim;
+  int dest_col = dest % x_dim;
+  bool go_right = false;
+  bool go_left = false;
+  bool go_up = false;
+  bool go_down = false;
+
+  if(curr==dest){
+    next = -1;
+  }	    
+  else{
+
+    if(src_col == dest_col){
+      if(src_row > dest_row){
+        go_up = true;
+        next = curr - x_dim;
+      }
+      else{
+        go_down = true;
+        next = curr + x_dim;
+      }
+    }
+    else{
+      if(src_col > dest_col){
+        go_left = true;
+        next = curr -1;
+      }
+      else{
+        go_right = true;
+        next = curr + 1;
+      }
+    }
+  }
+  return next;
+}
+
+void MemoryNetwork::evaluate(int node){
+  
+  node_list[node].sending_pkts_in_current_cyc=0;
+  int served_pkt = 0; 
+  
+  for(int vnet=0;vnet<_num_vnet_mnet;vnet++){//request network & response network
+
+    for(int port=0; port<=_router_radix_mnet; port++){
+
+      if((unsigned long)stats_total_retry_cycles%100000==0 && (unsigned long)stats_total_retry_cycles!=0){
+        cout<<node_list[node].return_vc_r_s_size(vnet,port)<<",";
+        if(port==_router_radix_mnet && vnet==0){
+          cout<<"|";
+        }
+        if(node==(num_nodes-1) && vnet==1 && port==_router_radix_mnet){
+          cout<<"]\n\n"<<endl;
+        }
+      } 
+
+      packet *l_pkt = node_list[node].read_front_pkt(port, vnet);
+      
+      if(l_pkt!=NULL && l_pkt->ready_to_send()){ //ready to send is about whether it spent enough time in the router
+        long long l_dest = l_pkt->get_dest();//it has to return next router
+        int next_node = mesh_neighbor_closer_to_dest(node,l_dest);
+        // when can_receive_pkt returns true, they need to reserve a space in the pim table as well
+                                                                            // downstream router
+        if(l_dest!=node){
+          //it checks in the inport of the next node: from_node--> node, to node -->next_node
+          bool can_send = node_list[next_node].can_receive_pkt(node, l_pkt);// it is checking for credit to go to
+          int inport = node_list[next_node].get_inport(node, l_pkt->src);
+          if(can_send){
+            node_list[node].sending_pkts_in_current_cyc++;
+            unsigned long retry_cnt = l_pkt->retry_to_send;
+#ifdef DEBUG_PRINT_MNET
+            if((watch_packet!=-1 && l_pkt->id == watch_packet) || watch_all_packets){
+              fprintf(debugfile,"%lu | sending packet %lu from node %d [outport: %d] to node %d [inport:%d] (src:%d|dest:%lld) retry %lu\n",
+                  global_clock,l_pkt->id, node, port, next_node,inport,l_pkt->src,l_dest,retry_cnt);        
+            }
+#endif
+            node_list[node].pop_front_pkt(port, l_pkt);
+            l_pkt->lat += global_clock - l_pkt->ntw_entry_time; 
+            //l_pkt->ntw_entry_time = global_clock;
+            l_pkt->hops++;
+            l_pkt->retry_to_send = 0;
+            node_list[next_node].make_entry_vc_r_s(node, l_pkt);
+            stats_total_hops++;
+            if(l_pkt->pim_operation){
+              stats_pim_hops++;
+            }
+          }
+          else{
+#ifdef DEBUG_PRINT_MNET
+            if((watch_packet!=-1 && l_pkt->id == watch_packet) || watch_all_packets){
+              fprintf(debugfile,"%lu | retry to send packet %lu from node %d [outport: %d] to node %d [inport:%d] (src:%d|dest:%lld) retry %lu\n",
+                  global_clock,l_pkt->id, node, port, next_node,inport,l_pkt->src,l_dest,l_pkt->retry_to_send);
+            }
+#endif
+            l_pkt->retry_to_send++;
+            stats_total_retry_cycles++;
+            double avg_retry_cycles_per_pkt = stats_total_retry_cycles / stats_total_pkts; 
+            stats_retry_ntw_cycles_per_pkt = avg_retry_cycles_per_pkt;
+          }
+        }
+        else{//if destination
+          if(l_pkt->pim_operation){
+            //if(node_list[next_node]._pim_tab_occupancy < _pim_tab_size){
+            handle_pim_inst(node, port, l_pkt);
+            //}
+           // else{
+           //   l_pkt->retry_to_send++;
+           //   stats_total_retry_cycles++;
+           //   double avg_retry_cycles_per_pkt = stats_total_retry_cycles / stats_total_pkts; 
+           //   stats_retry_ntw_cycles_per_pkt = avg_retry_cycles_per_pkt;
+           // }
+          }
+          else{
+            handle_regular_pkts_at_dest(node, port,l_pkt);
+          }
+        }
+      }
+      else{
+        if(l_pkt!=nullptr){
+          assert(l_pkt->not_ready_to_send++ <= router_stages + l_pkt->pkt_size);
+        }
+      }
+    }
+  }
+}
+
+
+void MemoryNetwork::handle_regular_pkts_at_dest(int node, int port, packet *l_pkt){
+  l_pkt->lat += global_clock - l_pkt->ntw_entry_time; 
+  assert(l_pkt->pid!=-1);
+  if(l_pkt->needs_resp==false){//to make sure it is a resp pkt
+    node_list[node].pop_front_pkt(port,l_pkt);
+#ifdef DEBUG_PRINT_MNET
+    if((watch_packet!=-1 && l_pkt->id == watch_packet) || watch_all_packets){
+      fprintf(debugfile,"%lu | consuming response/migration packet %lu(src:%d|dest:%lld) [migration? %d]\n",
+          global_clock,l_pkt->id,l_pkt->src,l_pkt->dest, (l_pkt->migration_pkt==true?1:0));        
+    }
+#endif      
+    stats_total_hops++;
+    stats_retired_pkt++;
+    if(l_pkt->pim_operation){
+      stats_pim_hops++;
+    }
+    if(l_pkt->migration_pkt==true){
+      if(!(l_pkt->pid >= 0 && l_pkt->pid <= num_proc_submission)){cout<<"[MNET] Invalid PID: "<<l_pkt->pid<<endl;}
+      assert(l_pkt->pid >=0 && l_pkt->pid <= num_proc_submission);
+      migration_completion_check[l_pkt->pid]--;
+    }
+    free(l_pkt);
+  }
+  else{//read or write request packets
+
+    if(l_pkt->retry_to_mem==0){ 
+      double net_lat_per_acc = stats_total_network_lat /stats_total_pkts;
+      stats_avg_pkt_lat=net_lat_per_acc;
+      stats_total_network_lat+=l_pkt->lat;
+    }
+    if(node_list[node].can_make_entry_for_mem() && !l_pkt->waiting_for_pim_sources){
+      node_list[node].pop_front_pkt(port,l_pkt);
+      l_pkt->entry_time = global_clock;
+      //////////////////////////////////////////////// OP STATS ///////////////////////////////////////////
+      if(l_pkt->opid!=0){
+        auto it = op_lat_breakdown_tracker.find(l_pkt->opid);
+        if(it==op_lat_breakdown_tracker.end()){
+          cout<<"Entry not found for pkt: "<<l_pkt->id<<" opid: "<<l_pkt->opid<<endl;
+          assert(0 && "*** Entry not found for OPID while reached dest node ***");
+        }
+        op_lat_breakdown_tracker[l_pkt->opid].push_back(global_clock);//recording when reached dest node
+      }
+      //////////////////////////////////////////////// OP STATS ///////////////////////////////////////////
+      l_pkt->hops++;
+      unsigned long time_2_dest = global_clock - l_pkt->c_time;
+      node_list[node].make_entry_mem_cube(l_pkt);//for pim operation writing the destinationh!!!
+#ifdef DEBUG_PRINT_MNET
+      if((watch_packet!=-1 && l_pkt->id == watch_packet) || watch_all_packets){
+        fprintf(debugfile,"%lu | packet %lu reached memQ dest %lld hops %d cycles %lu retry %lu mem queuing %lu\n",
+            global_clock,l_pkt->id,l_pkt->dest,l_pkt->hops,time_2_dest,l_pkt->retry_to_send,l_pkt->retry_to_mem);
+      }
+#endif     
+      stats_avg_num_hops = ++stats_total_hops / stats_total_pkts;
+      if(l_pkt->pim_operation){
+        stats_pim_hops++;
+      }
+    }
+    else{
+      unsigned long time_2_dest = global_clock - l_pkt->c_time;
+      stats_mem_queuing_delay++;
+      double q_delay_per_acc = stats_mem_queuing_delay / stats_total_memory_acc;
+      stats_mem_queuing_delay_per_acc=q_delay_per_acc;
+      l_pkt->retry_to_mem++;
+#ifdef DEBUG_PRINT_MNET
+      if((watch_packet!=-1 && l_pkt->id == watch_packet) || watch_all_packets){
+        fprintf(debugfile,"%lu | packet %lu retry in memQ dest %lld hops %d cycles %lu retry %lu mem queuing %lu\n",
+            global_clock,l_pkt->id,l_pkt->dest,l_pkt->hops,time_2_dest,l_pkt->retry_to_send,l_pkt->retry_to_mem);
+      }
+#endif     
+    }
+  }
+}
+
+
+void MemoryNetwork::retire(int node){
+  bool entered_loop = false;
+  for(int i=0;i<node_list[node].mem_cube.size();i++){
+    entered_loop = true;
+    if(node_list[node].mem_cube.size()>0){
+      
+      packet *l_pkt = node_list[node].mem_cube[i];
+      
+      if(l_pkt->mem_acc_lat==-1){//access latency is not set
+        l_pkt->mem_acc_lat = node_list[node].record_rowbuff_entry(l_pkt);
+      }
+      if(l_pkt->ready_to_retire() && node_list[node].check_and_make_response(l_pkt)){
+        node_list[node].mem_cube.erase(node_list[node].mem_cube.begin()+i); 
+        unsigned long time_taken = global_clock - l_pkt->c_time -l_pkt->mcq_delay;
+#ifdef DEBUG_PRINT_MNET
+        if((watch_packet!=-1 && l_pkt->id == watch_packet) || watch_all_packets){
+          fprintf(debugfile,"%lu | retiring packet %lu in %lu cycles\n",global_clock, l_pkt->id, time_taken);
+        }
+#endif
+        stats_retired_pkt++;
+        if(l_pkt->pim_operation){
+          stats_pim_acc_lat += global_clock - l_pkt->c_time;
+          stats_pim_op_ret++;
+        }
+
+        assert(l_pkt->pid!=-1 && "*** packet must have a pid ***");
+        sys_hop_count_monitor[l_pkt->pid].first++;
+        sys_hop_count_monitor[l_pkt->pid].second += l_pkt->hops;
+        hop_count_monitor[l_pkt->pid].first++;
+        hop_count_monitor[l_pkt->pid].second += l_pkt->hops;
+        
+        if(l_pkt->opid!=0){
+          stats_types_of_pkts_retire[0]++;
+          auto it = op_lat_breakdown_tracker.find(l_pkt->opid);
+          if(it==op_lat_breakdown_tracker.end()){
+            cout<<"Entry not found for pkt: "<<l_pkt->id<<" opid: "<<l_pkt->opid<<endl;
+            assert(0 && "*** Entry not found for OPID while retiring packet ***");
+          }
+          op_lat_breakdown_tracker[l_pkt->opid].push_back(global_clock);//recording final retire time
+          vector<unsigned long> &tmp = op_lat_breakdown_tracker[l_pkt->opid];
+          //cout<<"[MNET] latency for OP: "<<l_pkt->opid<<" [";
+          for(int i=0; i<5; i++){
+            assert(tmp[i+1] >= tmp[i]);
+            stats_op_latency_breakdown[i] += tmp[i+1] - tmp[i];
+          }
+          op_lat_breakdown_tracker.erase(l_pkt->opid);//deleting the entry from the table after final rrecord done 
+        }
+        else{//response packets, pim source requests, migration 
+          if(l_pkt->migration_pkt==false){//resp, pim src req
+            stats_types_of_pkts_retire[1]++;
+          }
+          else{//migrration pkts
+            stats_types_of_pkts_retire[2]++;
+          }
+        }
+
+        free(l_pkt);
+        stats_retired_mem_acc++;
+        stats_total_mem_s2ret_lat += time_taken; 
+        stats_total_DRAM_acc_lat += global_clock - l_pkt->entry_time;
+        stats_avg_mem_acc_lat = stats_total_mem_s2ret_lat / stats_retired_mem_acc;
+        stats_avg_DRAM_acc_lat = stats_total_DRAM_acc_lat / stats_retired_mem_acc;
+      }
+    }
+    else{
+      stats_mem_cube_empty++;
+    }  
+  }
+  if(entered_loop==false){
+    stats_mem_cube_size_zero++;
+  }
+  inflight_ntw_pkt=0;
+  for(int i=0; i<=5; i++){
+    inflight_ntw_pkt += node_list[node].return_vc_buff_size(0,i) + 
+      node_list[node].return_vc_buff_size(1,i);
+  }
+  inflight_mem_pkt = node_list[node].mem_cube.size();
+  node_list[node].send_response();
+  node_list[node].send_pim_requests();
+}
+
+void MemoryNetwork::inject(packet *l_pkt, int NI_id){
+  node_list[l_pkt->src].inject_vc_r_s(l_pkt->src, l_pkt, NI_id);  
+}
+
+int node::record_rowbuff_entry(packet *pkt){
+  unsigned long addr = pkt->pa;
+  int lat = -1;
+  if(addr!=0){ 
+    int phy_page_num = pkt->pa >> 11;//keeping same as VA. Can be different
+    int bank = phy_page_num & (num_banks_per_vault-1); 
+    assert(bank<num_banks_per_vault); 
+    int vault = (phy_page_num >> num_banks_per_vault) & (num_vaults-1);
+    assert(vault<num_vaults);
+    if(row_buff[vault][bank] == phy_page_num){
+      stats_mem_row_hit++;
+      stats_tot_row_hit_hist[id]++;
+      lat = mem_row_hit_lat;      
+    }
+    else{
+      stats_mem_row_miss++;
+      stats_tot_row_miss_hist[id]++;
+      row_buff[vault][bank] = phy_page_num;
+      lat = mem_row_miss_lat;      
+    }
+    stats_row_buffer_missrate_hist[id] = (stats_tot_row_miss_hist[id] * 1.0) / 
+      (stats_tot_row_hit_hist[id] + stats_tot_row_miss_hist[id]);
+    //cout<<"[MNET] stat row buffer miss rate: "<<stats_row_buffer_missrate_hist[id]<<endl; 
+  return lat;
+  }
+  else{
+    //TODO: need to see this happens????
+  }
+}
+
+void node::send_response(){
+  for(int i=0;i<5;i++){
+    bool can_inj = can_inject_resp(5);
+    if(can_inj && has_response()){
+      int NI_id = 0;
+      packet *l_pkt = get_resp_pkt();
+      l_pkt->ntw_entry_time = global_clock;
+      make_entry_vc_r_s(this->id, l_pkt);  
+      //inject_vc_r_s(id, l_pkt, NI_id);  
+      remove_resp_pkt();
+    }
+  }
+}
+
+bool node::check_and_make_response(packet *pkt){
+  if(avail_resp_queue()){//cheking space in the resp queue
+    if(pkt->needs_resp){
+      packet *l_pkt = new packet;
+      l_pkt->pid = pkt->pid;
+      l_pkt->c_time = global_clock;
+      l_pkt->src = id;
+      l_pkt->dest = pkt->src;
+      l_pkt->pa = pkt->src;
+      l_pkt->resp_for_pkt_id = pkt->id;
+      l_pkt->pim_src1_pa = pkt->pim_src1_pa;
+      l_pkt->pim_src2_pa = pkt->pim_src2_pa;
+      l_pkt->dest_pa = pkt->dest_pa;//this is coming after src_to_node conversion
+      l_pkt->pim_operation = pkt->pim_operation;
+      l_pkt->pim_table_index = pkt->pim_table_index;
+      l_pkt->pkt_size = ceil(resp_pkt_size /(double) link_width);
+      l_pkt->needs_resp = false;
+      //l_pkt->id = _packet_id;
+      //_packet_id++;
+      make_entry_resp_queue(l_pkt);
+      stats_total_resp_pkts++;
+      stats_total_pkts++;
+    }
+    return true;
+  }
+  else if(!pkt->needs_resp){
+    return true;
+  }
+  else{
+    stats_failed_to_create_resp_pkts++;
+    return false;//can not retire the current req packet
+  }
+}
+
+void node::send_pim_requests(){
+  for(int i=0;i<5-sending_pkts_in_current_cyc;i++){
+    bool can_inj = can_inject_req(5);
+    if(can_inj && has_pim_pkt()){
+      packet *l_pkt = get_pim_pkt();
+      int NI_id = 0;
+      l_pkt->ntw_entry_time = global_clock;
+      l_pkt->entry_time = global_clock;
+      make_entry_vc_r_s(this->id, l_pkt);  
+      //inject_vc_r_s(id, l_pkt, NI_id);  
+      remove_pim_pkt();
+    }
+  }
+}
+
+void node::make_pim_packets(int i, int node, packet *pkt){
+}
+
+int node::find_empty_space_pim_tab(){
+  for(int i=0;i<_pim_tab_size;i++){
+    if(!pim_entry_tab[i].valid){
+      return i;
+    }
+  }
+  return -1;//menas no space available
+}
+
+
+
+void MemoryNetwork::handle_pim_inst(int node, int port, packet *pkt){//must be a pim request
+  
+  //if(pkt->pim_src1!=-1 || pkt->pim_src2!=-1){//need to make an entry in the pim table
+  if(pkt->make_entry_pim_table==true){
+    assert(pkt->make_entry_pim_table==true && "need to make entry in pim table must be true");
+    assert(pkt->needs_resp==true && "Must be a PIM request that needs response");  
+    int l_pim_table_index = node_list[node].find_empty_space_pim_tab();
+    
+    if(l_pim_table_index == -1){
+      stats_pim_tab_full++;
+    }
+    //else if(pkt->pim_src1!=node || pkt->pim_src2!=node){
+    else {
+      assert(l_pim_table_index!=-1 && "Invalid PIM table index returned");
+      
+      node_list[node].pim_entry_tab[l_pim_table_index].valid=true;
+      node_list[node].pim_entry_tab[l_pim_table_index].entry_time=global_clock;
+      node_list[node].incr_num_pim_entries();//occupancy counter incr should notbe here with pim entries
+                                             // as that is already incremented before
+      node_list[node]._pim_tab_occupancy++;
+      pkt->waiting_for_pim_sources = true;
+
+      //if(!_run_baseline){
+      //  fill_trace_buffer(pkt->pid,global_clock,pkt->id,
+      //    pkt->dest_va,pkt->src1_va,pkt->src2_va,
+      //    node, pkt->pim_src1, pkt->pim_src2);
+      //}
+
+      //if(pkt->pim_src1!=-1 && pkt->pim_src1!=node){
+      if(pkt->pim_src1!=-1 ){
+        stats_total_memory_acc++;
+        packet *src1_pkt = new packet;
+        src1_pkt->pid = pkt->pid;
+        src1_pkt->c_time = global_clock;
+        src1_pkt->src = node;
+        src1_pkt->dest = pkt->pim_src1;//physical address
+        src1_pkt->pa = pkt->pim_src1;//this is coming after src_to_node conversion
+        src1_pkt->pkt_size = ceil(req_pkt_size /(double) link_width);
+        src1_pkt->needs_resp = true;
+        src1_pkt->pim_table_index = l_pim_table_index; 
+        src1_pkt->pim_operation = true;
+        src1_pkt->pim_src1_pa = pkt->pim_src1_pa;
+        src1_pkt->dest_pa = pkt->dest_pa;//this is coming after src_to_node conversion
+        assert(src1_pkt->pim_src1_pa!=0 & src1_pkt->dest_pa!=0);
+        node_list[node].pim_entry_tab[l_pim_table_index].src1_ready = false; 
+        node_list[node].pim_entry_tab[l_pim_table_index].src1_pkt_id = src1_pkt->id; 
+        stats_total_pkts++;
+        node_list[node].pim_req_queue.push_back(src1_pkt);//we will try to push it to vc_r_s in next cycle
+        pkt->pim_src1 = -1;//resetting the field as it is more required
+#ifdef DEBUG_PRINT_MNET
+        if((watch_packet!=-1 && pkt->id == watch_packet) || watch_all_packets){
+          fprintf(debugfile,"%lu | [node:%d] PIM packet %lu | req src-1 packet %lu [src:%d|dest:%lld] \n"
+              ,global_clock, node, pkt->id, src1_pkt->id, src1_pkt->src, src1_pkt->dest);        
+        }
+#endif
+      }
+      else{
+        //cout<<"src: "<<pkt->pim_src1<<" node: "<<node<<endl;
+        node_list[node].pim_entry_tab[l_pim_table_index].src1_ready = true; 
+      }
+      //if(pkt->pim_src2!=-1 && pkt->pim_src2!=node){
+      if(pkt->pim_src2!=-1 ){
+        stats_total_memory_acc++;
+        packet *src2_pkt = new packet;
+        src2_pkt->pid = pkt->pid;
+        src2_pkt->c_time = global_clock;
+        src2_pkt->src = node;
+        src2_pkt->dest = pkt->pim_src2;
+        src2_pkt->pa = pkt->pim_src2;
+        src2_pkt->pkt_size = ceil(req_pkt_size /(double) link_width);
+        src2_pkt->needs_resp = true;
+        src2_pkt->pim_operation = true;
+        src2_pkt->pim_src2_pa = pkt->pim_src2_pa;
+        src2_pkt->dest_pa = pkt->dest_pa;//this is coming after src_to_node conversion
+        src2_pkt->pim_table_index = l_pim_table_index; 
+        assert(src2_pkt->pim_src2_pa!=0 & src2_pkt->dest_pa!=0);
+        node_list[node].pim_entry_tab[l_pim_table_index].src2_ready = false; 
+        node_list[node].pim_entry_tab[l_pim_table_index].src2_pkt_id = src2_pkt->id; 
+
+        stats_total_pkts++;
+        node_list[node].pim_req_queue.push_back(src2_pkt);//we will try to push it to vc_r_s in next cycle
+        pkt->pim_src2 = -1;//resetting the field as it is no more required
+#ifdef DEBUG_PRINT_MNET
+        if((watch_packet!=-1 && pkt->id == watch_packet) || watch_all_packets){
+          fprintf(debugfile,"%lu | [node:%d] PIM packet %lu | req src-2 packet %lu [src:%d|dest:%lld] \n"
+              ,global_clock, node, pkt->id, src2_pkt->id, src2_pkt->src, src2_pkt->dest);        
+        }
+#endif
+      }
+      else{
+        node_list[node].pim_entry_tab[l_pim_table_index].src2_ready = true; 
+      }
+      pkt->pim_table_index = l_pim_table_index; 
+      node_list[node].pim_entry_tab[l_pim_table_index].pkt = pkt;//this one is the orginal pkt 
+      //TODO have check the size of the table before making entry
+      node_list[node].pop_front_pkt(port,pkt);//removing packet from vc_r_s
+    }
+    //else{//no entry made in the pim table
+    //  pkt->waiting_for_pim_sources = false;
+    //  handle_regular_pkts_at_dest(node, port, pkt);
+    //} 
+  }  
+  else{//need not make an entry in the pim table
+    if(pkt->needs_resp==true){//THIS MUST BE HANDLED IN THE REGULAR FLOW
+      pkt->waiting_for_pim_sources = false;
+      handle_regular_pkts_at_dest(node, port, pkt);
+    }
+    //else if(pkt->pim_table_index!=-1){//got the response, so update the pim tables
+    else{//got the response, so update the pim tables
+      int index = pkt->pim_table_index;
+      assert(index!=-1 && "*** Invalid PIM entry table index ***");
+
+      if(node_list[node].pim_entry_tab[index].src1_pkt_id == pkt->resp_for_pkt_id){
+        node_list[node].pim_entry_tab[index].src1_ready=true;
+        node_list[node].pim_entry_tab[index].src1_reach_time=global_clock;
+        node_list[node].pop_front_pkt(port, pkt);
+        unsigned long entry_time = node_list[node].pim_entry_tab[index].entry_time;
+        assert(pkt->pim_src1_pa!=0);
+        stats_retired_pkt++;
+        free(pkt);
+      } 
+      if(node_list[node].pim_entry_tab[index].src2_pkt_id == pkt->resp_for_pkt_id){
+        node_list[node].pim_entry_tab[index].src2_ready=true;
+        node_list[node].pim_entry_tab[index].src2_reach_time=global_clock;
+        unsigned long entry_time = node_list[node].pim_entry_tab[index].entry_time;
+        assert(pkt->pim_src2_pa!=0);
+        node_list[node].pop_front_pkt(port,pkt);
+        stats_retired_pkt++;
+        free(pkt);
+      }
+      if(node_list[node].pim_entry_tab[index].src1_ready && 
+          node_list[node].pim_entry_tab[index].src2_ready){
+        node_list[node].pim_entry_tab[index].ready_to_do_pim= true;
+        //if(node_list[node].can_inject_req(4)){
+        if(node_list[node].can_make_entry_for_mem()){
+          packet * l_pkt =  node_list[node].pim_entry_tab[index].pkt;
+          l_pkt->pim_operation = false;
+          l_pkt->needs_resp = true;
+          l_pkt->waiting_for_pim_sources = false;
+          node_list[node].pim_entry_tab[index].valid=false;
+          node_list[node].dcr_num_pim_entries();
+          node_list[node]._pim_tab_occupancy--; 
+          if(stats_pim_tab_full>0){
+            stats_pim_tab_full--;
+          }
+          //TODO
+          l_pkt->entry_time = global_clock;
+          //////////////////////////////////////////////// OP STATS ///////////////////////////////////////////
+          if(l_pkt->opid!=0){
+            auto it = op_lat_breakdown_tracker.find(l_pkt->opid);
+            if(it==op_lat_breakdown_tracker.end()){
+              cout<<"Entry not found for pkt: "<<l_pkt->id<<" opid: "<<l_pkt->opid<<endl;
+              assert(0 && "*** Entry not found for OPID while reached dest node ***");
+            }
+            op_lat_breakdown_tracker[l_pkt->opid].push_back(global_clock);//recording when reached dest node
+          }
+          //////////////////////////////////////////////// OP STATS ///////////////////////////////////////////
+          l_pkt->hops++;
+          unsigned long time_2_dest = global_clock - l_pkt->c_time;
+          node_list[node].make_entry_mem_cube(l_pkt);//for pim operation writing the destinationh!!!
+          //node_list[node].make_entry_vc_r_s(node, l_pkt);//reinjected as a normal packet
+          //TODO
+          assert(pkt->dest_pa!=0);
+          unsigned long src1_reach_time = node_list[node].pim_entry_tab[index].src1_reach_time;
+          unsigned long src2_reach_time = node_list[node].pim_entry_tab[index].src2_reach_time;
+          unsigned long entry_time = node_list[node].pim_entry_tab[index].entry_time;
+          unsigned long avg_reach_time = (src1_reach_time + src2_reach_time)/2;
+#ifdef DEBUG_PRINT_MNET
+            if((watch_packet!=-1 && l_pkt->id == watch_packet) || watch_all_packets){
+              fprintf(debugfile,"%lu | received both pim sources for packet %ld (can inject)\n"
+                  ,global_clock, l_pkt->id);        
+            }
+#endif
+        }
+        else{
+#ifdef DEBUG_PRINT_MNET
+            if((watch_packet!=-1 && node_list[node].pim_entry_tab[index].pkt->id == watch_packet) || watch_all_packets){
+              fprintf(debugfile,"%lu | received both pim sources for packet %ld (can NOT inject)\n",
+                  global_clock, node_list[node].pim_entry_tab[index].pkt->id);        
+            }
+#endif
+        }
+      }
+    }
+  }
+}
+
+/*
+ * TODO: have to check the situation with two op and three op separately!!!!
+ */
+//void MemoryNetwork::fill_trace_buffer(unsigned long pid,
+//                                      unsigned long clk,
+//                                      unsigned long pkt_id,
+//                                      unsigned long va_dest,
+//                                      unsigned long va_src1,
+//                                      unsigned long va_src2,
+//                                      unsigned long node_dest,
+//                                      unsigned long node_src1,
+//                                      unsigned long node_src2)
+//{ 
+//  stats_trace_buffer_fill++;
+//  vector<long double> v = {pid,clk,pkt_id,va_dest,va_src1,va_src2,node_dest,node_src1,node_src2};
+//  trace_buffer.push_back(v);
+//
+//  page_fault_state[pid][node_dest]++; 
+//  page_fault_state[pid][node_src1]++; 
+//  page_fault_state[pid][node_src2]++;
+//  int last = page_fault_state[pid].size()-1;
+//  page_fault_state[pid][last] += 3;
+//  //cout<<"last: "<<last<<" :"<<page_fault_state[pid-1][last]<<endl;  
+//  //cout<<"size: "<<trace_buffer.size()<<endl;
+//  //if(trace_buffer.size()%1000==0){
+//    //for(int i=0;i<trace_buffer.size();i++){
+//    //  for(int j=0;j<9;j++){
+//    //    cout<<" "<<trace_buffer[i][j];
+//    //  }
+//    //  cout<<endl;
+//    //}
+//  //}
+//}

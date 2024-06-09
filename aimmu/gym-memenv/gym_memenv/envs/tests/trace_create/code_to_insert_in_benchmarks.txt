@@ -1,0 +1,12 @@
+//global area 
+static FILE *fp = NULL; 
+
+static void init_streams(void) __attribute__((constructor)); 
+static void init_streams(void)
+{
+  fp = fopen("kmeans-pim.op", "w");
+}
+
+
+//in roi for the operands
+fprintf(fp,"1,1,1,%lu,%lu,%lu\n",(unsigned long)&ans, (unsigned long)&pt1[i], (unsigned long)&pt2[i]);

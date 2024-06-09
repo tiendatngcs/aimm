@@ -1,0 +1,1061 @@
+ 1265  cd ..
+ 1266  ls
+ 1267  cd results_14_01_2021_07\:33_pm/
+ 1268  ls
+ 1269  cd ..
+ 1270  ls
+ 1271  mv results_14_01_2021_07\:33_pm/ results_14_01_2021_07_33_pm/
+ 1272  ls
+ 1273  cd results_14_01_2021_07_33_pm/
+ 1274  ls
+ 1275  mv spmv_baseline spmv_baseline_10r
+ 1276  mv spmv_learning spmv_learning_10r
+ 1277  ls
+ 1278  cd ..
+ 1279  ls
+ 1280  cd ..
+ 1281  ls
+ 1282  make clean;make -j8
+ 1283  python simulate.py --aimmu-config setup/spmv_learning.cfg  | tee stats/spmv_learning/spmv_learning.log
+ 1284  python simulate.py --aimmu-config setup/spmv_learning.cfg  | tee stats/spmv_learning/spmv_learning.log &
+ 1285  ls
+ 1286  cd stats/
+ 1287  ls
+ 1288  cd ..
+ 1289  ls
+ 1290  cd tests/
+ 1291  ls
+ 1292  cd graph_support/
+ 1293  cd plotscripts/
+ 1294  ls
+ 1295  python series_plot.py ../../../stats/spmv_learning opc_timeline.pdf "baseline,aimmu" "OPC timeline" "Epoch,opc-average" ../../../stats/spmv_baseline/opc_avg_default21-49-19-14-01-2021.csv ../../../stats/spmv_learning/opc_avg_default04-43-19-14-01-2021.csv 
+ 1296  cd ../..
+ 1297  ls
+ 1298  cd ..
+ 1299  ls
+ 1300  cd stats/
+ 1301  ls
+ 1302  ls -lrt
+ 1303  mv spmv_baseline spmv_baseline_30r
+ 1304  mv spmv_learning spmv_learning_22r
+ 1305  mv spmv_* results_14_01_2021_07_33_pm/
+ 1306  ls
+ 1307  cd results_14_01_2021_07_33_pm/
+ 1308  ls
+ 1309  cd ..
+ 1310  ls
+ 1311  cd ..
+ 1312  ls
+ 1313  vi setup/spmv_learning.cfg 
+ 1314  vimdiff setup/spmv_learning.cfg setup/spmv_baseline.cfg 
+ 1315  ls
+ 1316  screen -ls
+ 1317  screen 
+ 1318  htop
+ 1319  ls
+ 1320  vi setup/spmv_learning.cfg 
+ 1321  ls
+ 1322  htop
+ 1323  screen -R pts-27.pritam 
+ 1324  ls
+ 1325  htop
+ 1326  ls
+ 1327  cd tests/
+ 1328  ls
+ 1329  cd pg_reuse_pred/
+ 1330  ls
+ 1331  cd ..
+ 1332  ls
+ 1333  cd graph_support/
+ 1334  ls
+ 1335  cd plotscripts/
+ 1336  ls
+ 1337  python consolidate.py ../../../stats/spmv_learning hop_timeline.pdf "hop-average timeline" "Epoch,hop-average" ../../../stats/results_14_01_2021_07_33_pm/spmv_learning_22r/mig_freq_avg_default04-43-19-14-01-2021.csv 
+ 1338  cd ../..
+ 1339  cd graph_support/plotscripts/
+ 1340  ls
+ 1341  python consolidate.py ../../../stats/spmv_learning hop_timeline.pdf "hop-average timeline" "Epoch,hop-average" ../../../stats/results_13_01_2021_05_02_pm/spmv_learning/migr_count_35-23-03-13-01-2021.csv 
+ 1342  python consolidate.py ../../../stats/spmv_learning hop_timeline.pdf "hop-average timeline" "Epoch,hop-average" ../../../stats/results_11_01_2021_01_48_am/spmv_learning/migr_count_50-50-03-10-01-2021.csv 
+ 1343  htop
+ 1344  cd ../..
+ 1345  ls
+ 1346  cd pg_reuse_pred/
+ 1347  ls
+ 1348  cd input/
+ 1349  ls
+ 1350  vi spmv.pg 
+ 1351  cat spmv.pg 
+ 1352  vi spmv.pg 
+ 1353  cat spmv.pg | awk -F, '{print $1}'
+ 1354  cat spmv.pg | awk -F, '{print $2}'
+ 1355  cat spmv.pg | awk -F, '{print $2}' | grep "256"
+ 1356  cat spmv.pg | awk -F, '{print $2}' |  
+ 1357  cat spmv.pg | awk -F, '{print $2}' | sort | uniq -c
+ 1358  cd ..
+ 1359  ls
+ 1360  vi run_test.sh 
+ 1361  htop
+ 1362  ls
+ 1363  cd ../..
+ 1364  ls
+ 1365  vi src/rlmmu_wrapper.cpp 
+ 1366  vi src/data_collect.cpp 
+ 1367  htop
+ 1368  ls
+ 1369  source set_env
+ 1370  ls
+ 1371  cat runall.sh 
+ 1372  cd stats/
+ 1373  ls
+ 1374  mkdir spmv_learning
+ 1375  mkdir spmv_baseline
+ 1376  cd ..
+ 1377  ls
+ 1378  cat runall.sh 
+ 1379  python simulate.py --aimmu-config setup/spmv_learning.cfg  | tee stats/spmv_learning/spmv_learning.log
+ 1380  htop
+ 1381  cd aimmu_project/aimmu/
+ 1382  ls
+ 1383  cd gym-memenv/gym_memenv
+ 1384  ls
+ 1385  cd envs/
+ 1386  ls
+ 1387  cd tests/
+ 1388  ls
+ 1389  cd graph_support/
+ 1390  ls
+ 1391  cd plotscripts/
+ 1392  ls
+ 1393  python series_plot.py ../../../stats/spmv_learning opc_timeline.pdf "baseline,aimmu" "OPC timeline" "Epoch,opc-average" ../../../stats/results_14_01_2021_07_33_pm/spmv_baseline/opc_avg_default21-49-19-14-01-2021.csv ../../../stats/spmv_learning/opc_avg_default14-43-01-15-01-2021.csv 
+ 1394  python series_plot.py ../../../stats/spmv_learning opc_timeline.pdf "baseline,aimmu" "OPC timeline" "Epoch,opc-average" ../../../stats/results_14_01_2021_07_33_pm/spmv_baseline_30r/opc_avg_default21-49-19-14-01-2021.csv ../../../stats/spmv_learning/opc_avg_default14-43-01-15-01-2021.csv 
+ 1395  source ~/Python-3.6.0/newenv/bin/activate
+ 1396  ls
+ 1397  python series_plot.py ../../../stats/spmv_learning opc_timeline.pdf "baseline,aimmu" "OPC timeline" "Epoch,opc-average" ../../../stats/results_14_01_2021_07_33_pm/spmv_baseline_30r/opc_avg_default21-49-19-14-01-2021.csv  ../../../stats/spmv_learning/opc_avg_default14-43-01-15-01-2021.csv 
+ 1398  screen -R pts-27.pritam 
+ 1399  ls
+ 1400  cd aimmu_project/
+ 1401  ls
+ 1402  cd trace_folder/
+ 1403  cd ..
+ 1404  ls
+ 1405  cd aimmu/
+ 1406  ls
+ 1407  cd gym-memenv/gym_memenv
+ 1408  ls
+ 1409  cd envs/
+ 1410  ls
+ 1411  source set_env 
+ 1412  ls
+ 1413  cd aimmu_project/
+ 1414  ls
+ 1415  cd aimmu/
+ 1416  ls
+ 1417  cd gym-memenv/gym_memenv
+ 1418  ls
+ 1419  cd envs/
+ 1420  ls
+ 1421  source set_env 
+ 1422  ls
+ 1423  cd stats/
+ 1424  ls
+ 1425  vi spmv_learning/spmv_learning.log 
+ 1426  ls
+ 1427  cd ..
+ 1428  cd stats/
+ 1429  ls
+ 1430  cd spmv_
+ 1431  cd spmv_learning/
+ 1432  ls
+ 1433  cd ..
+ 1434  ls
+ 1435  ls -lrt
+ 1436  mv spmv_baseline spmv_learning results_14_01_2021_07_33_pm/
+ 1437  ls
+ 1438  cd ..
+ 1439  ls
+ 1440  vi mem_env.py 
+ 1441  vi src/sim.cpp 
+ 1442  vi stats/results_14_01_2021_07_33_pm/spmv_learning/spmv_learning.log 
+ 1443  vi src/sim.cpp 
+ 1444  ls
+ 1445  vi setup/backprop_learning.cfg 
+ 1446  make clean;make -j7
+ 1447  ls
+ 1448  cat runall.sh 
+ 1449  python simulate.py --aimmu-config setup/backprop_learning.cfg | tee stats/backprop_learning/backprop_learning.log
+ 1450  vi src/sim.cpp 
+ 1451  ls
+ 1452  make clean;make -j7
+ 1453  python simulate.py --aimmu-config setup/backprop_learning.cfg | tee stats/backprop_learning/backprop_learning.log
+ 1454  vi src/vmap.cpp 
+ 1455  vi src/vmap.hpp 
+ 1456  make clean;make -j7
+ 1457  python simulate.py --aimmu-config setup/backprop_learning.cfg | tee stats/backprop_learning/backprop_learning.log
+ 1458  vi src/sim.cpp 
+ 1459  make clean;make -j7
+ 1460  python simulate.py --aimmu-config setup/backprop_learning.cfg | tee stats/backprop_learning/backprop_learning.log
+ 1461  vi src/mmu.cpp 
+ 1462  vi src/sim.cpp 
+ 1463  make clean;make -j7
+ 1464  python simulate.py --aimmu-config setup/backprop_learning.cfg | tee stats/backprop_learning/backprop_learning.log
+ 1465  vi src/sim.cpp 
+ 1466  make clean;make -j7
+ 1467  python simulate.py --aimmu-config setup/backprop_learning.cfg | tee stats/backprop_learning/backprop_learning.log
+ 1468  vi mem_env.py 
+ 1469  python simulate.py --aimmu-config setup/backprop_learning.cfg | tee stats/backprop_learning/backprop_learning.log
+ 1470  vi src/sim.cpp 
+ 1471  vi mem_env.py 
+ 1472  python simulate.py --aimmu-config setup/backprop_learning.cfg | tee stats/backprop_learning/backprop_learning.log
+ 1473  vi mem_env.py 
+ 1474  python simulate.py --aimmu-config setup/backprop_learning.cfg | tee stats/backprop_learning/backprop_learning.log
+ 1475  vi mem_env.py 
+ 1476  python simulate.py --aimmu-config setup/backprop_learning.cfg | tee stats/backprop_learning/backprop_learning.log
+ 1477  vi src/rlmmu_wrapper.cpp 
+ 1478  vi mem_env.py 
+ 1479  vi src/sim.cpp 
+ 1480  make clean;make -j7
+ 1481  python simulate.py --aimmu-config setup/backprop_learning.cfg | tee stats/backprop_learning/backprop_learning.log
+ 1482  vi src/sim.cpp 
+ 1483  vi mem_env.py 
+ 1484  vi src/sim.cpp 
+ 1485  ls
+ 1486  make clean;make -j7
+ 1487  python simulate.py --aimmu-config setup/backprop_learning.cfg | tee stats/backprop_learning/backprop_learning.log
+ 1488  vi src/sim.cpp 
+ 1489  vi mem_env.py 
+ 1490  python simulate.py --aimmu-config setup/backprop_learning.cfg | tee stats/backprop_learning/backprop_learning.log
+ 1491  vi mem_env.py 
+ 1492  vi src/sim.cpp 
+ 1493  vi src/sim.hpp 
+ 1494  vi src/rlmmu_wrapper.hpp 
+ 1495  vi src/rlmmu_wrapper.cpp 
+ 1496  vi src/sim.cpp 
+ 1497  vi src/mmu.cpp 
+ 1498  ls
+ 1499  vi src/sim.cpp 
+ 1500  vi src/rlmmu_pybind.cpp 
+ 1501  vi src/rlmmu_wrapper.hpp 
+ 1502  vi src/rlmmu_pybind.cpp 
+ 1503  vi src/rlmmu_wrapper.hpp 
+ 1504  vi src/rlmmu_pybind.cpp 
+ 1505  vi mem_env.py 
+ 1506  make clean;make -j7
+ 1507  vi src/sim.cpp 
+ 1508  make clean;make -j7
+ 1509  python simulate.py --aimmu-config setup/backprop_learning.cfg | tee stats/backprop_learning/backprop_learning.log
+ 1510  vi mem_env.py
+ 1511  python simulate.py --aimmu-config setup/backprop_learning.cfg | tee stats/backprop_learning/backprop_learning.log
+ 1512  vi src/sim.cpp 
+ 1513  make clean;make -j7
+ 1514  python simulate.py --aimmu-config setup/backprop_learning.cfg | tee stats/backprop_learning/backprop_learning.log
+ 1515  vi src/sim.cpp 
+ 1516  vi mem_env.py 
+ 1517  python simulate.py --aimmu-config setup/backprop_learning.cfg | tee stats/backprop_learning/backprop_learning.log
+ 1518  vi mem_env.py 
+ 1519  python simulate.py --aimmu-config setup/backprop_learning.cfg | tee stats/backprop_learning/backprop_learning.log
+ 1520  vi src/sim.cpp 
+ 1521  ls
+ 1522  make clean;make -j7
+ 1523  ls
+ 1524  vi simulate.py 
+ 1525  screen 
+ 1526  htop
+ 1527  source set_env 
+ 1528  ls
+ 1529  cat runall.sh 
+ 1530  cd stats/
+ 1531  ls
+ 1532  mkdir spmv_learning
+ 1533  ls
+ 1534  cd ..
+ 1535  ls
+ 1536  python simulate.py --aimmu-config setup/spmv_learning.cfg  | tee stats/spmv_learning/spmv_learning.log &
+ 1537  cd aimmu_project/
+ 1538  ls
+ 1539  cd aimmu/
+ 1540  ls
+ 1541  cd gym-memenv/gym_memenv
+ 1542  ls
+ 1543  cd envs/
+ 1544  ls
+ 1545  source set_env 
+ 1546  ls
+ 1547  python simulate.py --aimmu-config setup/spmv_baseline.cfg 
+ 1548  ls
+ 1549  source set_env
+ 1550  ls
+ 1551  cd aimmu_project/
+ 1552  ls
+ 1553  cd aimmu/
+ 1554  lsa
+ 1555  ls
+ 1556  cd gym-memenv/gym_memenv
+ 1557  ls
+ 1558  cd envs/
+ 1559  ls
+ 1560  source set_env 
+ 1561  ls
+ 1562  vi src/vmap.cpp 
+ 1563  vi src/v2p/pfa.cpp 
+ 1564  vi stats/spmv_baseline/stats.out 
+ 1565*  
+ 1566  vi src/v2p/pfa.cpp 
+ 1567  ls
+ 1568  vi src/vmap.cpp 
+ 1569  ls
+ 1570  vi src/sim.cpp 
+ 1571  make clean;make -j7
+ 1572  cd aimmu_project/aimmu/
+ 1573  ls
+ 1574  cd gym-memenv/gym_memenv
+ 1575  ls
+ 1576  cd envs/
+ 1577  ls
+ 1578  cd stats/
+ 1579  ls
+ 1580  cd spmv_learning/
+ 1581  ls
+ 1582  vi spmv_learning.log 
+ 1583  htop
+ 1584  cd ..
+ 1585  ls
+ 1586  cd ..
+ 1587  ls
+ 1588  cd stats/
+ 1589  ls
+ 1590  vi spmv_learning/spmv_learning.log 
+ 1591  htop
+ 1592  !
+ 1593  screen -R pts-27.pritam 
+ 1594  ls
+ 1595  cd ..
+ 1596  ls
+ 1597  screen -R pts-27.pritam 
+ 1598  cd stats/
+ 1599  ls
+ 1600  ls -lrt
+ 1601  cd results_14_01_2021_07_33_pm/
+ 1602  l;s
+ 1603  ls
+ 1604  vi spmv_baseline_30r/spmv_baseline.log 
+ 1605  cd ../..
+ 1606  ls
+ 1607  screen -R pts-27.pritam 
+ 1608  htop
+ 1609  screen -R pts-27.pritam 
+ 1610  '
+ 1611  ls
+ 1612  ls
+ 1613  ls
+ 1614  source set_env 
+ 1615  ls
+ 1616  ps -ax | grep python
+ 1617  ls
+ 1618  cd stats/
+ 1619  ls
+ 1620  mv spmv_learning spmv_learning_70r
+ 1621  ls
+ 1622  cd ..
+ 1623  ls
+ 1624  vi src/vmap.cpp 
+ 1625  ls
+ 1626  make clean;make -j7
+ 1627  '
+ 1628  ls
+ 1629  ls
+ 1630  ls
+ 1631  python simulate.py --aimmu-config setup/backprop_learning.cfg | tee stats/backprop_learning/backprop_learning.log
+ 1632  vi setup/backprop_learning.cfg 
+ 1633  python simulate.py --aimmu-config setup/backprop_learning.cfg | tee stats/backprop_learning/backprop_learning.log
+ 1634  vi src/vmap.cpp 
+ 1635  make clean;make -j8
+ 1636  python simulate.py --aimmu-config setup/backprop_learning.cfg | tee stats/backprop_learning/backprop_learning.log
+ 1637  vi setup/backprop_learning.cfg 
+ 1638  vi src/m_net/m_net.cpp
+ 1639  vi configs/synth_config.cpp 
+ 1640  make clean;make -j7
+ 1641  python simulate.py --aimmu-config setup/backprop_learning.cfg | tee stats/backprop_learning/backprop_learning.log
+ 1642  vi src/vmap.cpp 
+ 1643  vi src/sim.cpp 
+ 1644  make clean;make -j7
+ 1645  python simulate.py --aimmu-config setup/backprop_learning.cfg | tee stats/backprop_learning/backprop_learning.log
+ 1646  python simulate.py --aimmu-config setup/backprop_baseline.cfg 
+ 1647  ps -ax | grep "backprop"
+ 1648  kill -9 16144
+ 1649  ls
+ 1650  vi src/sim.cpp 
+ 1651  python simulate.py --aimmu-config setup/backprop_learning.cfg | tee stats/backprop_learning/backprop_learning.log
+ 1652  python simulate.py --aimmu-config setup/spmv_learning.cfg 
+ 1653  ls
+ 1654  python simulate.py --aimmu-config setup/spmv_baseline.cfg 
+ 1655  ps -ax | grep "spmv"
+ 1656  kill -9 18119
+ 1657  ls
+ 1658  python simulate.py --aimmu-config setup/spmv_learning.cfg 
+ 1659  vi mem_env.py 
+ 1660  python simulate.py --aimmu-config setup/spmv_learning.cfg 
+ 1661  ls
+ 1662  vi src/v2p/pfa.cpp 
+ 1663  vi src/sim.cpp 
+ 1664  make clean;make -j7
+ 1665  python simulate.py --aimmu-config setup/spmv_baseline.cfg 
+ 1666  vi src/v2p/pfa.cpp 
+ 1667  vi src/vmap.cpp 
+ 1668  make clean;make -j7
+ 1669  python simulate.py --aimmu-config setup/spmv_baseline.cfg 
+ 1670  vi src/m_net/m_net.cpp
+ 1671  make clean;make -j7
+ 1672  python simulate.py --aimmu-config setup/spmv_baseline.cfg 
+ 1673  vi src/vmap.cpp 
+ 1674  vi src/m_net/m_net.cpp
+ 1675  make clean;make -j7
+ 1676  python simulate.py --aimmu-config setup/spmv_baseline.cfg 
+ 1677  vi src/m_net/m_net.cpp
+ 1678  vi src/v2p/pfa.cpp 
+ 1679  make clean;make -j7
+ 1680  python simulate.py --aimmu-config setup/spmv_baseline.cfg 
+ 1681  vi src/v2p/pfa.cpp 
+ 1682  make clean;make -j7
+ 1683  vi src/v2p/pfa.cpp 
+ 1684  make clean;make -j7
+ 1685  python simulate.py --aimmu-config setup/spmv_baseline.cfg 
+ 1686  ps -ax | grep "python"
+ 1687  kill -9 9891
+ 1688  vi src/m_net/m_net.cpp
+ 1689  python simulate.py --aimmu-config setup/spmv_learning.cfg 
+ 1690  vi configs/synth_config.cpp 
+ 1691  python simulate.py --aimmu-config setup/spmv_learning.cfg 
+ 1692  make clean;make -j7
+ 1693  python simulate.py --aimmu-config setup/spmv_learning.cfg 
+ 1694  vi configs/synth_config.cpp 
+ 1695  python simulate.py --aimmu-config setup/spmv_learning.cfg 
+ 1696  vi simulate.py 
+ 1697  python simulate.py --aimmu-config setup/spmv_learning.cfg 
+ 1698  vi simulate.py 
+ 1699  python simulate.py --aimmu-config setup/spmv_learning.cfg 
+ 1700  vi simulate.py 
+ 1701  python simulate.py --aimmu-config setup/spmv_learning.cfg 
+ 1702  vi src/vmap.cpp 
+ 1703  make clean;make -j7
+ 1704  vi simulate.py 
+ 1705  make clean;make -j7
+ 1706  python simulate.py --aimmu-config setup/spmv_learning.cfg 
+ 1707  vi src/vmap.cpp 
+ 1708  make clean;make -j7
+ 1709  python simulate.py --aimmu-config setup/spmv_learning.cfg 
+ 1710  ls
+ 1711  make clean
+ 1712  ls
+ 1713  git status
+ 1714  git add setup src simulate.py mem_env.py runall.sh 
+ 1715  git status
+ 1716  git add configs
+ 1717  git status
+ 1718  git add tests/synth_mem_traffic 
+ 1719  git status
+ 1720  git add tests/graph_support
+ 1721  git status
+ 1722  git commit -m "some fine tuning and debugging ... getting good outcome from SPMV after altering "dest" and pfa frame selection"
+ 1723  git push
+ 1724  ls
+ 1725  make -j8
+ 1726  python simulate.py --aimmu-config setup/spmv_baseline.cfg 
+ 1727  ps -ax | grep "python"
+ 1728  kill -9 23081
+ 1729  ls
+ 1730  cd stats/
+ 1731  ls
+ 1732  rm -rf backprop_* lud_learning mac_learning pagerank_learning rbm_learning reduce_learning spmv_baseline spmv_learning spmv_learning_70r
+ 1733  ls
+ 1734  cd ..
+ 1735  ls
+ 1736  vi runall.sh 
+ 1737  ls
+ 1738  screen
+ 1739  ls
+ 1740  vi setup/backprop_baseline.cfg 
+ 1741  vimdiff setup/backprop_baseline.cfg 
+ 1742  vimdiff setup/backprop_baseline.cfg setup/backprop_learning.cfg 
+ 1743  ls
+ 1744  vimdiff setup/spmv_learning.cfg setup/spmv_learning.cfg 
+ 1745  vimdiff setup/spmv_baseline.cfg setup/spmv_learning.cfg 
+ 1746  ls
+ 1747  vimdiff setup/pagerank_baseline.cfg setup/pagerank_learning.cfg 
+ 1748  ls
+ 1749  vi configs/synth_config.cpp 
+ 1750  ls
+ 1751  vi runall.sh 
+ 1752  ls
+ 1753  screen 
+ 1754  htop
+ 1755  source set_env
+ 1756  ls
+ 1757  ./runall.sh 
+ 1758  vi stats/backprop_baseline/backprop_baseline.log 
+ 1759  vi stats/backprop_learning/backprop_learning.log 
+ 1760  ls
+ 1761  ls
+ 1762  cd aimmu_project/
+ 1763  ls
+ 1764  cd aimmu/
+ 1765  ls
+ 1766  cd gym-memenv/gym_memenv
+ 1767  ls
+ 1768  cd envs/
+ 1769  ls
+ 1770  htop
+ 1771  ls
+ 1772  cd stats/
+ 1773  ls
+ 1774  vimdiff spmv_baseline/stats.out spmv_learning/stats.out 
+ 1775  ls
+ 1776  vi pagerank_learning/pagerank_learning.log 
+ 1777  htop
+ 1778  screen -R pts-27.pritam 
+ 1779  ls
+ 1780  vi backprop_baseline/stats.out 
+ 1781  cd ..
+ 1782  ls
+ 1783  htop
+ 1784  vi setup/backprop_baseline.cfg 
+ 1785  ls
+ 1786  htop
+ 1787  screen -R pts-27.pritam 
+ 1788  htop
+ 1789  ls
+ 1790  source set_env 
+ 1791  ls
+ 1792  cd stats/
+ 1793  ls
+ 1794  rm -rf *_baseline *_learning
+ 1795  ls
+ 1796  cd ..
+ 1797  ls
+ 1798  vi setup/spmv_baseline.cfg 
+ 1799  vi setup/spmv_learning.cfg 
+ 1800  vimdiff setup/spmv_baseline.cfg setup/spmv_learning.cfg 
+ 1801  vimdiff setup/pagerank_baseline.cfg setup/pagerank_learning.cfg 
+ 1802  vimdiff setup/backprop_baseline.cfg setup/backprop_learning.cfg 
+ 1803  ls
+ 1804  htop
+ 1805  ls
+ 1806  vi src/vmap.cpp 
+ 1807  make clean;make -j7
+ 1808  ls
+ 1809  ./runall.sh 
+ 1810  cd stats/
+ 1811  ls
+ 1812  cd ..
+ 1813  ls
+ 1814  vi src/sim.cpp 
+ 1815  vi setup/spmv_learning.cfg 
+ 1816  vi setup/backprop_learning.cfg 
+ 1817  vi setup/spmv_learning.cfg 
+ 1818  vi setup/pagerank_learning.cfg 
+ 1819  vi runall.sh 
+ 1820  cd stats/
+ 1821  ls
+ 1822  cd spmv_learning/
+ 1823  ls
+ 1824  cd ..
+ 1825  ls
+ 1826  cd spmv_baseline/
+ 1827  ls
+ 1828  vi stats.out 
+ 1829  cd ..
+ 1830  ls
+ 1831  rm -rf spmv_learning
+ 1832  ls
+ 1833  cd ..
+ 1834  ls
+ 1835  vi runall.sh 
+ 1836  ./runall.sh 
+ 1837  vimdiff stats/pagerank_baseline/stats.out stats/pagerank_learning/pagerank_learning.
+ 1838  ls
+ 1839  vi stats/pagerank_learning/pagerank_learning.log 
+ 1840  ls
+ 1841  vi runall.sh 
+ 1842  cat runall.sh 
+ 1843  python simulate.py --aimmu-config setup/pagerank_learning.cfg  | tee stats/pagerank_learning/pagerank_learning.log
+ 1844  gdb --args python simulate.py --aimmu-config setup/pagerank_learning.cfg  | tee stats/pagerank_learning/pagerank_learning.log
+ 1845  ls
+ 1846  vi src/rlmmu_wrapper.cpp 
+ 1847  make clean;make -j7
+ 1848  gdb --args python simulate.py --aimmu-config setup/pagerank_learning.cfg  | tee stats/pagerank_learning/pagerank_learning.log
+ 1849  vi src/rlmmu_wrapper.cpp 
+ 1850  make clean;make -j7
+ 1851  gdb --args python simulate.py --aimmu-config setup/pagerank_learning.cfg  | tee stats/pagerank_learning/pagerank_learning.log
+ 1852  vi src/rlmmu_wrapper.cpp 
+ 1853  cd aimmu_project/
+ 1854  ls
+ 1855  cd aimmu/
+ 1856  ls
+ 1857  cd gym-memenv/gym_memenvy
+ 1858  cd gym-memenv/
+ 1859  ls
+ 1860  cd gym_memenv
+ 1861  ls
+ 1862  cd envs/
+ 1863  ls
+ 1864  source set_env 
+ 1865  ls
+ 1866  cd aimmu_project/
+ 1867  ls
+ 1868  cd aimmu/
+ 1869  ls
+ 1870  cd gym-memenv/gym_memenv
+ 1871  ls
+ 1872  cd envs/
+ 1873  ls
+ 1874  source set_env
+ 1875  ls
+ 1876  gdb --args python simulate.py --aimmu-config setup/pagerank_learning.cfg  | tee stats/pagerank_learning/pagerank_learning.log
+ 1877  vi src/rlmmu_wrapper.cpp 
+ 1878  make clean;make -j7
+ 1879  gdb --args python simulate.py --aimmu-config setup/pagerank_learning.cfg  | tee stats/pagerank_learning/pagerank_learning.log
+ 1880  vi src/rlmmu_wrapper.cpp 
+ 1881  grep -r "possible_migration_cand_list" *
+ 1882  vi src/vmap.cpp 
+ 1883  vi src/rlmmu_wrapper.cpp 
+ 1884  make clean;make -j7
+ 1885  vi src/rlmmu_wrapper.cpp 
+ 1886  make clean;make -j7
+ 1887  gdb --args python simulate.py --aimmu-config setup/pagerank_learning.cfg  | tee stats/pagerank_learning/pagerank_learning.log
+ 1888  vi src/rlmmu_wrapper.cpp 
+ 1889  ls
+ 1890  make clean;make -j8
+ 1891  ls
+ 1892  python simulate.py --aimmu-config setup/pagerank_learning.cfg  | tee stats/pagerank_learning/pagerank_learning.log &
+ 1893  ls
+ 1894  vimdiff stats/pagerank_baseline/stats.out stats/pagerank_learning/stats.out 
+ 1895  ls
+ 1896  cd stats/
+ 1897  ls
+ 1898  cd ..
+ 1899  ls
+ 1900  vi runall.sh 
+ 1901  vimdiff setup/rbm_baseline.cfg setup/rbm_learning.cfg 
+ 1902  vimdiff setup/lud_baseline.cfg setup/lud_learning.cfg 
+ 1903  vimdiff setup/mac_baseline.cfg setup/mac_learning.cfg 
+ 1904  ls
+ 1905  vimdiff setup/reduce_baseline.cfg setup/reduce_learning.cfg 
+ 1906  ls
+ 1907  vi runall.sh 
+ 1908  ls
+ 1909  screen 
+ 1910  htop
+ 1911  vi runall.sh 
+ 1912  ls
+ 1913  htop
+ 1914  source set_env
+ 1915  ls
+ 1916  ./runall.sh 
+ 1917  ls
+ 1918  cd aimmu_project/
+ 1919  ls
+ 1920  cd aimmu/
+ 1921  ls
+ 1922  cd gym-memenv/gym_memenv
+ 1923  ls
+ 1924  cd envs/
+ 1925  ls
+ 1926  source set_env 
+ 1927  ls
+ 1928  htop
+ 1929  vi runall.sh 
+ 1930  screen -R pts-27.pritam 
+ 1931  ls
+ 1932  vimdiff  setup/mac_baseline.cfg  setup/mac_learning.cfg 
+ 1933  vimdiff setup/reduce_baseline.cfg setup/reduce_learning.cfg 
+ 1934  ls
+ 1935  screen 
+ 1936  ls
+ 1937  cd stats/
+ 1938  ls
+ 1939  vimdiff lud_baseline/stats.out lud_learning/stats.out 
+ 1940  ls
+ 1941  htop
+ 1942  ls
+ 1943  screen -R pts-27.pritam 
+ 1944  ls
+ 1945  cd aimmu_project/
+ 1946  ls
+ 1947  cd aimmu/
+ 1948  ls
+ 1949  cd gym-memenv/gym_memenv
+ 1950  ls
+ 1951  cd envs/
+ 1952  ls
+ 1953  source set_env 
+ 1954  ls
+ 1955  htop
+ 1956  ls
+ 1957  cd stats/
+ 1958  ls
+ 1959  vimdiff mac_baseline/stats.out mac_learning/stats.out 
+ 1960  vimdiff reduce_baseline/stats.out reduce_learning/stats.out 
+ 1961  vimdiff rbm_baseline/stats.out rbm_learning/stats.out 
+ 1962  ls
+ 1963  cd ..
+ 1964  ls
+ 1965  cd setup/
+ 1966  ls
+ 1967  cp backprop_baseline.cfg backprop_baseline_rand.cfg 
+ 1968  cp lud_baseline.cfg lud_baseline_rand.cfg 
+ 1969  cp mac_baseline.cfg mac_baseline_rand.cfg 
+ 1970  cp pagerank_baseline.cfg pagerank_baseline_rand.cfg 
+ 1971  cp rbm_baseline.cfg rbm_baseline_rand.cfg 
+ 1972  cp reduce_baseline.cfg reduce_baseline_rand.cfg 
+ 1973  cp spmv_baseline.cfg spmv_baseline_rand.cfg 
+ 1974  ls 
+ 1975  vi backprop_baseline_rand.cfg 
+ 1976  ls
+ 1977  cd aimmu_project/
+ 1978  ls
+ 1979  cd aimmu/
+ 1980  ls
+ 1981  cd gym-memenv/gym_memenv
+ 1982  ls
+ 1983  cd envs/
+ 1984* 
+ 1985  source set_env 
+ 1986  ls
+ 1987  vi src/v2p/pfa.cpp 
+ 1988  ls
+ 1989  cd aimmu_project/
+ 1990  ls
+ 1991  cd aimmu/
+ 1992  ls
+ 1993  cd gym-memenv/
+ 1994  ls
+ 1995  cd gym_memenv
+ 1996  ls
+ 1997  cd envs/
+ 1998  ls
+ 1999  source set_env
+ 2000  lsd
+ 2001  ls
+ 2002  vi src/v2p/pfa.cpp 
+ 2003  make clena;make -j7
+ 2004  vi src/v2p/pfa.cpp 
+ 2005  make clena;make -j7
+ 2006  make clean;make -j7
+ 2007  python simulate.py --aimmu-config setup/pagerank_learning.cfg  
+ 2008  vi src/v2p/pfa.cpp 
+ 2009  cd stats/
+ 2010  ls
+ 2011  cd pagerank_learning/
+ 2012  ls
+ 2013  ls -lrt
+ 2014  rm -rf opc_avg_default50-50-00-19-01-2021.csv hop_avg_50-50-00-19-01-2021.csv
+ 2015  ls
+ 2016  ls -lrt
+ 2017  cd ..
+ 2018  ls
+ 2019  mkdir results_01_19_2021_12_48_am
+ 2020  mv *_learning *_baseline results_01_19_2021_12_48_am/
+ 2021  ls -lrt
+ 2022  ls
+ 2023  cd ..
+ 2024  ls
+ 2025  vi configs/synth_config.cpp 
+ 2026  vi src/v2p/pfa.cpp 
+ 2027  make clean;make -j7
+ 2028  python simulate.py --aimmu-config setup/spmv_baseline.cfg 
+ 2029  ps -ax | grep "pyhton"
+ 2030  vi src/v2p/pfa.cpp 
+ 2031  make clean;make -j7
+ 2032  python simulate.py --aimmu-config setup/spmv_baseline.cfg 
+ 2033  ps -ax | grep "pyhton"
+ 2034  python simulate.py --aimmu-config setup/spmv_learning.cfg 
+ 2035  vi src/v2p/pfa.cpp 
+ 2036  make clean;make -j7
+ 2037  python simulate.py --aimmu-config setup/spmv_learning.cfg 
+ 2038  vi configs/synth_config.cpp 
+ 2039  ls
+ 2040  cd setup/
+ 2041  ls
+ 2042  vi lud_baseline.cfg 
+ 2043  vi lud_baseline_rand.cfg 
+ 2044  vi lud_learning.cfg 
+ 2045  vi mac_baseline.cfg 
+ 2046  vi mac_baseline_rand.cfg 
+ 2047  vi mac_learning.cfg 
+ 2048  vi pagerank_baseline.cfg 
+ 2049  vi pagerank_baseline_rand.cfg 
+ 2050  vi pagerank_learning.cfg 
+ 2051  vi pagerank_baseline_rand.cfg 
+ 2052  vi rbm_baseline.cfg 
+ 2053  vi rbm_baseline_rand.cfg 
+ 2054  vi rbm_learning.cfg 
+ 2055  vi reduce_baseline.cfg 
+ 2056  vi reduce_baseline_rand.cfg 
+ 2057  vi reduce_learning.cfg 
+ 2058  vi spmv_baseline.cfg 
+ 2059  vi spmv_baseline_rand.cfg 
+ 2060  vi spmv_learning.cfg 
+ 2061  ls
+ 2062  cd ..
+ 2063  ls
+ 2064  make clean;make -j7
+ 2065  ls
+ 2066  vi runall.sh 
+ 2067  ls
+ 2068  ./runall.sh 
+ 2069  cd setup/
+ 2070  ls
+ 2071  vi backprop_baseline_rand.cfg 
+ 2072  vi lud_baseline_rand.cfg 
+ 2073  vi backprop_baseline.cfg 
+ 2074  vi backprop_learning.cfg 
+ 2075  vi lud_baseline.cfg 
+ 2076  vi lud_learning.cfg 
+ 2077  vi mac_baseline.cfg 
+ 2078  vi mac_baseline_rand.cfg 
+ 2079  vi mac_learning.cfg 
+ 2080  vi pagerank_baseline.cfg 
+ 2081  vi pagerank_baseline_rand.cfg 
+ 2082  vi pagerank_learning.cfg 
+ 2083  vi rbm_baseline.cfg 
+ 2084  vi rbm_baseline_rand.cfg 
+ 2085  vi rbm_learning.cfg 
+ 2086  vi reduce_baseline.cfg 
+ 2087  vi reduce_baseline_rand.cfg 
+ 2088  vi reduce_learning.cfg 
+ 2089  vi spmv_baseline.cfg 
+ 2090  vi spmv_baseline_rand.cfg 
+ 2091  vi spmv_learning.cfg 
+ 2092  ls
+ 2093  cd ..
+ 2094  ls
+ 2095  ./runall.sh 
+ 2096  ls
+ 2097  cd stats/
+ 2098  ls
+ 2099  ls -lrt
+ 2100  cd results_01_19_2021_12_48_am/
+ 2101  ls
+ 2102  cd ..
+ 2103  ls
+ 2104  vi spmv_baseline_rand/spmv_baseline_rand.log 
+ 2105  cd spmv_baseline_rand/
+ 2106  ls
+ 2107  cd ..
+ 2108  ls
+ 2109  cd backprop_baseline_rand/
+ 2110  ls
+ 2111  cd ..
+ 2112  cd backprop_baseline_rand/
+ 2113  ls
+ 2114  vi backprop_baseline_rand.log 
+ 2115  ls
+ 2116  cd ..
+ 2117  ls
+ 2118  cd backprop_baseline
+ 2119  ls
+ 2120  cd ..
+ 2121  ls
+ 2122  cd spmv_baseline
+ 2123  ls
+ 2124  cd ..
+ 2125  ls
+ 2126  cd ..
+ 2127  ls
+ 2128  cd stats/
+ 2129  ls
+ 2130  cd results_01_19_2021_12_48_am/
+ 2131  ls
+ 2132  cd backprop_baseline/
+ 2133  ls
+ 2134  vi backprop_baseline.log 
+ 2135  cd ..
+ 2136  ls
+ 2137  cd ..
+ 2138  l
+ 2139  ls
+ 2140  cd ..
+ 2141  ls
+ 2142  vimdiff setup/backprop_baseline.cfg setup/backprop_baseline_rand.cfg 
+ 2143  ls
+ 2144  vi setup/lud_baseline_rand.cfg 
+ 2145  vi setup/mac_baseline_rand.cfg 
+ 2146  vi setup/pagerank_baseline_rand.cfg 
+ 2147  vi setup/rbm_baseline_rand.cfg 
+ 2148  vi setup/reduce_baseline_rand.cfg 
+ 2149  vi setup/spmv_baseline_rand.cfg 
+ 2150  vi setup/backprop_baseline_rand.cfg 
+ 2151  ls
+ 2152  cd stats/
+ 2153  ls
+ 2154  mv backprop_baseline/* backprop_baseline_rand/
+ 2155  mv lud_baseline/* lud_baseline_rand/
+ 2156  mv mac_baseline* mac_baseline_rand/
+ 2157  mv mac_baseline/* mac_baseline_rand/
+ 2158  cd mac_baseline_rand/
+ 2159  ls
+ 2160  mv mac_baseline/* .
+ 2161  ls
+ 2162  rm -rf mac_baseline
+ 2163  ls
+ 2164  cd ..
+ 2165  l
+ 2166  ls
+ 2167  mv pagerank_baseline/* pagerank_baseline_rand/
+ 2168  mv rbm_baseline/* rbm_baseline_rand/
+ 2169  mv reduce_baseline/* reduce_baseline_rand/
+ 2170  mv spmv_baseline/* spmv_baseline_rand/
+ 2171  rm -rf *_baseline
+ 2172  ls -lrt
+ 2173  rm -rf spmv_learning
+ 2174  ls
+ 2175  ls -lrt
+ 2176  mv *_rand results_01_19_2021_12_48_am/
+ 2177  ls
+ 2178  ls -lrt
+ 2179  cd results_01_19_2021_12_48_am/
+ 2180  ls
+ 2181  vimdiff backprop_baseline/stats.out backprop_baseline_rand/stats.out backprop_learning/stats.out 
+ 2182  ls
+ 2183  cd ../..
+ 2184  ls
+ 2185  cd tests/
+ 2186  ls
+ 2187  cd graph_support/
+ 2188  ls
+ 2189  cd plotscripts/
+ 2190  ls
+ 2191  python series_plot.py ../../../stats/results_01_19_2021_12_48_am opc_timeline_backprop.pdf "baseline,aimmu" "OPC timeline" "Epoch,opc-average" ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/opc_avg_default16-12-15-17-01-2021.csv  ../../../stats/results_01_19_2021_12_48_am/backprop_learning/opc_avg_default14-21-15-17-01-2021.csv 
+ 2192  python series_plot.py ../../../stats/results_01_19_2021_12_48_am opc_timeline_lud.pdf "baseline,aimmu" "OPC timeline" "Epoch,opc-average" ../../../stats/results_01_19_2021_12_48_am/lud_baseline/opc_avg_default19-46-02-18-01-2021.csv  ../../../stats/results_01_19_2021_12_48_am/lud_learning/opc_avg_default05-48-02-18-01-2021.csv 
+ 2193  python series_plot.py ../../../stats/results_01_19_2021_12_48_am opc_timeline_mac.pdf "baseline,aimmu" "OPC timeline" "Epoch,opc-average" ../../../stats/results_01_19_2021_12_48_am/mac_baseline/opc_avg_default34-48-11-18-01-2021.csv  ../../../stats/results_01_19_2021_12_48_am/mac_learning/opc_avg_default19-50-11-18-01-2021.csv 
+ 2194  python series_plot.py ../../../stats/results_01_19_2021_12_48_am opc_timeline_pagerank.pdf "baseline,aimmu" "OPC timeline" "Epoch,opc-average" ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/opc_avg_default33-10-15-17-01-2021.csv  ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/opc_avg_default12-21-01-18-01-2021.csv 
+ 2195  python series_plot.py ../../../stats/results_01_19_2021_12_48_am opc_timeline_rbm.pdf "baseline,aimmu" "OPC timeline" "Epoch,opc-average" ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/opc_avg_default49-56-12-18-01-2021.csv  ../../../stats/results_01_19_2021_12_48_am/rbm_learning/opc_avg_default53-59-12-18-01-2021.csv 
+ 2196  python series_plot.py ../../../stats/results_01_19_2021_12_48_am opc_timeline_spmv.pdf "baseline,aimmu" "OPC timeline" "Epoch,opc-average" ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/opc_avg_default58-16-14-17-01-2021.csv  ../../../stats/results_01_19_2021_12_48_am/spmv_learning/opc_avg_default49-54-14-17-01-2021.csv 
+ 2197  ls
+ 2198  vi run.sh 
+ 2199  ls
+ 2200  cat run.sh 
+ 2201  python stats_vector_plot_stack_bar.py ../../../stats/results_01_19_2021_12_48_am pim_op_lab_brk.pdf "PIM-Op Latency Breakdown" "Benchmarks,Count" ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats_vec.out
+ 2202  python stats_vector_plot_stack_bar.py ../../../stats/results_01_19_2021_12_48_am pim_tab_full.pdf "PIM-Tab Full" "Benchmarks,Count" ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats_vec.out
+ 2203  python stats_vector_plot_stack_bar.py ../../../stats/results_01_19_2021_12_48_am pim_tab_full.pdf "PIM-Tab Full" "Benchmarks,Count" ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats_vec.out 
+ 2204  python stats_vector_plot_stack_bar.py ../../../stats/results_01_19_2021_12_48_am pim_op_lab_brk.pdf "PIM-Op Latency Breakdown" "Benchmarks,Count" ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats_vec.out
+ 2205  ls
+ 2206  cat run.sh 
+ 2207  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am speedup.pdf "baseline,aimmu" "Speedup" "Benchmarks,Speedup"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out . ./../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2208  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am speedup.pdf "baseline,aimmu" "Speedup" "Benchmarks,Speedup"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2209  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am speedup.pdf "baseline,aimmu" "Normalized Execution Time" "Benchmarks,Normalized Execution Time"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2210  vi stats_plot_norm_bar_anynum.py 
+ 2211  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am speedup.pdf "baseline,aimmu" "Normalized Execution Time" "Benchmarks,Normalized Execution Time"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2212  vi stats_plot_norm_bar_anynum.py 
+ 2213  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am speedup.pdf "baseline,aimmu" "Normalized Execution Time" "Benchmarks,Normalized Execution Time"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2214  vi stats_plot_norm_bar_anynum.py 
+ 2215  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am speedup.pdf "baseline,aimmu" "Normalized Execution Time" "Benchmarks,Normalized Execution Time"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2216  vi stats_plot_norm_bar_anynum.py 
+ 2217  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am speedup.pdf "baseline,aimmu" "Normalized Execution Time" "Benchmarks,Normalized Execution Time"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2218  vi stats_plot_norm_bar_anynum.py 
+ 2219  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am speedup.pdf "baseline,aimmu" "Normalized Execution Time" "Benchmarks,Normalized Execution Time"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2220  vi stats_plot_norm_bar_anynum.py 
+ 2221  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am speedup.pdf "baseline,aimmu" "Normalized Execution Time" "Benchmarks,Normalized Execution Time"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2222  vi stats_plot_norm_bar_anynum.py 
+ 2223  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am speedup.pdf "baseline,aimmu" "Normalized Execution Time" "Benchmarks,Normalized Execution Time"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2224  vi stats_plot_norm_bar_anynum.py 
+ 2225  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am speedup.pdf "baseline,aimmu" "Normalized Execution Time" "Benchmarks,Normalized Execution Time"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2226  vi stats_plot_norm_bar_anynum.py 
+ 2227  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am speedup.pdf "baseline,aimmu" "Normalized Execution Time" "Benchmarks,Normalized Execution Time"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2228  vi stats_plot_norm_bar_anynum.py 
+ 2229  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am speedup.pdf "baseline,aimmu" "Normalized Execution Time" "Benchmarks,Normalized Execution Time"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2230  vi stats_plot_norm_bar_anynum.py 
+ 2231  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am speedup.pdf "baseline,aimmu" "Normalized Execution Time" "Benchmarks,Normalized Execution Time"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2232  vi stats_plot_norm_bar_anynum.py 
+ 2233  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am speedup.pdf "baseline,aimmu" "Normalized Execution Time" "Benchmarks,Normalized Execution Time"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2234  vi stats_plot_norm_bar_anynum.py 
+ 2235  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am speedup.pdf "baseline,aimmu" "Normalized Execution Time" "Benchmarks,Normalized Execution Time"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2236  vi stats_plot_norm_bar_anynum.py 
+ 2237  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am speedup.pdf "baseline,aimmu" "Normalized Execution Time" "Benchmarks,Normalized Execution Time"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2238  vi stats_plot_norm_bar_anynum.py 
+ 2239  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am speedup.pdf "baseline,aimmu" "Normalized Execution Time" "Benchmarks,Normalized Execution Time"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2240  vi stats_plot_norm_bar_anynum.py 
+ 2241  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am speedup.pdf "baseline,aimmu" "Normalized Execution Time" "Benchmarks,Normalized Execution Time"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2242  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am proc_stall.pdf "baseline,aimmu" "Process Stall" "Benchmarks,Cycles"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2243  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am mcq_lat.pdf "baseline,aimmu" "MCQ Latency" "Benchmarks,Cycles"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2244  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am opc.pdf "baseline,aimmu" "OPC" "Benchmarks,Cycles"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2245  python series_plot.py ../../../stats/results_01_19_2021_12_48_am opc_timeline_reduce.pdf "baseline,aimmu" "OPC timeline" "Epoch,opc-average" ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/opc_avg_default39-30-12-18-01-2021.csv  ../../../stats/results_01_19_2021_12_48_am/reduce_learning/opc_avg_default04-32-12-18-01-2021.csv 
+ 2246  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am network_lat.pdf "baseline,aimmu" "Network Latency" "Benchmarks,Cycles"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2247  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am proc_stall.pdf "baseline,aimmu" "Process Stall" "Benchmarks,Cycles"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2248  vi stats_plot_norm_bar_anynum.py 
+ 2249  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am proc_stall.pdf "baseline,aimmu" "Process Stall" "Benchmarks,Cycles"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2250  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am proc_stall.pdf "baseline,aimmu" "Process Stall" "Benchmarks,Cycles"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2251  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am row_hit.pdf "baseline,aimmu" "Row Hit" "Benchmarks,Hit Ratio"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2252  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am row_hit.pdf "baseline,aimmu" "Row Hit" "Benchmarks,Hit Rate"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2253  python stats_vector_plot_stack_bar.py ../../../stats/results_01_19_2021_12_48_am row_buffer_hit_break.pdf "Row-buffer Breakdown" "Benchmarks,Normalized Hit" ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats_vec.out
+ 2254  cd ../..
+ 2255  ls
+ 2256  cd ..
+ 2257  ls
+ 2258  cd tests/
+ 2259  ls
+ 2260  cd graph_support/plotscripts/
+ 2261  ls
+ 2262  python stats_plot_norm_bar_anynum.py ../../../stats/results_01_19_2021_12_48_am response_failed.pdf "baseline,aimmu" "Response Falied" "Benchmarks,Fail Rate"  ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats.out
+ 2263  python stats_vector_plot_stack_bar.py ../../../stats/results_01_19_2021_12_48_am row_buffer_hit_break.pdf "Row-buffer Breakdown" "Benchmarks,Row Hit" ../../../stats/results_01_19_2021_12_48_am/backprop_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/backprop_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/lud_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/lud_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/mac_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/mac_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/pagerank_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/pagerank_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/rbm_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/rbm_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/reduce_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/reduce_learning/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/spmv_baseline/stats_vec.out ../../../stats/results_01_19_2021_12_48_am/spmv_learning/stats_vec.out
+ 2264  history > history
+
+python stats_plot_norm_bar_anynum.py ../../../stats/results_03_07_2021_09_53_pm/graphs execution_time_1c.pdf
+"baseline,aimmu" "Execution Time" "Benchmarks,Latency" ../../../stats/results_03_07_2021_09_53_pm/1c
+/base/backprop_baseline/stats.out ../../../stats/results_03_07_2021_09_53_pm/1c/aimmu/backprop_learning/stats.out
+../../../stats/results_03_07_2021_09_53_pm/1c/base/lud_baseline/stats.out ../../../stats/results_03_07_2021_09_53_pm/1c/
+aimmu/lud_learning/stats.out ../../../stats/results_03_07_2021_09_53_pm/1c/base/mac_baseline/stats.out
+../../../stats/results_03_07_2021_09_53_pm/1c/aimmu/mac_learning/stats.out
+../../../stats/results_03_07_2021_09_53_pm/1c/base/pager ank_baseline/stats.out
+../../../stats/results_03_07_2021_09_53_pm/1c/aimmu/pagerank_learning/stats.out
+../../../stats/results_03_07_2021_09_53_pm/1c/base/rbm_baseline/stats.out
+../../../stats/results_03_07_2021_09_53_pm/1c/aimmu/rbm_l earning/stats.out
+../../../stats/results_03_07_2021_09_53_pm/1c/base/reduce_baseline/stats.out
+../../../stats/results_03_07_2021_09_53_pm/1c/aimmu/reduce_learning/stats.out
+../../../stats/results_03_07_2021_09_53_pm/1c/base/spmv_basel ine/stats.out
+../../../stats/results_03_07_2021_09_53_pm/1c/aimmu/spmv_learning/stats.out
+
+ python violin.py ../../../stats/MICRO2021/graphs/ pagerank_comp_util_violin.pdf "BNMP,BNMP+AIMM" ""
+"Techniques,Utilization" ../../../stats/MICRO2021/1P/BNMP/pagerank_baseline/pim_tab_occ_count_32-50-02-19-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP+AIMM/pagerank_learning/pim_tab_occ_count_38-10-03-19-03-2021.csv
+
+
+python boxplot.py ../../../stats/MICRO2021/graphs/ active_pages.pdf "BP,LUD,KM,MAC,PR,RBM,RD,SC,SGEMM,SPMV" "" ""
+../../../stats/ MICRO2021/1P/BNMP/backprop_baseline/active_pages_48-21-03-28-03-2021.csv
+../../../stats/results_03_29_2021_07_13_pm/lud_baseline/active_pages_48-21-03-28-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP/kmeans_baseline/active_pages_43-17- 22-29-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP/mac_baseline/active_pages_48-21-03-28-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP/pagerank_baseline/active_pages_48-21-03-28-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP/rbm_baseline /active_pages_48-21-03-28-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP/reduce_baseline/active_pages_48-21-03-28-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP/streamcluster_baseline/active_pages_08-09-10-30-03-2021.csv ../../../stats/MI
+CRO2021/1P/BNMP/sgemm_baseline/active_pages_08-09-10-30-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP/spmv_baseline/active_pages_48-21-03-28-03-2021.csv
+
+
+ python violin.py ../../../stats/MICRO2021/graphs comp_dist.pdf
+"BP-B,BP-T,BP-A,LUD-B,LUD,T,LUD-A,KM-B,KM-T,KM-A,MAC-B,MAC-T,MAC-A
+,PR-B,PR-T,PR-A,RBM-B,RBM-T,RBM-A,RD-B,RD-T,RD-A,SC-B,SC-T,SC-A,SPMV-B,SPMV,T,SPMV-A" "" ""
+../../../stats/MICRO2021/1P/BNMP/backprop_baseline/pim_tab_occ_count_32-50-02-19-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP+TOM/backprop_bas eline_tom/pim_tab_occ_count_43-17-22-29-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP+AIMM/backprop_learning/pim_tab_occ_count_38-10-03-19-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP/kmeans_baseline/pim_tab_occ_count_43-17-22-29-03-2 021.csv
+../../../stats/MICRO2021/1P/BNMP+TOM/kmeans_baseline_tom/pim_tab_occ_count_48-12-01-30-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP+AIMM/kmeans_learning/pim_tab_occ_count_06-45-03-06-04-2021.csv
+../../../stats/MICRO2021/1P/BNM P/mac_baseline/pim_tab_occ_count_31-50-02-19-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP+TOM/mac_baseline_tom/pim_tab_occ_count_48-12-01-30-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP+AIMM/mac_learning/pim_tab_occ_count_38-10-03-19- 03-2021.csv
+../../../stats/MICRO2021/1P/BNMP/pagerank_baseline/pim_tab_occ_count_32-50-02-19-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP+TOM/pagerank_baseline_tom/pim_tab_occ_count_43-17-22-29-03-2021.csv
+../../../stats/MICRO2021/1P/ BNMP+AIMM/pagerank_learning/pim_tab_occ_count_38-10-03-19-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP/rbm_baseline/pim_tab_occ_count_32-50-02-19-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP+TOM/rbm_baseline_tom/pim_tab_occ_count_49-1 2-01-30-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP+AIMM/rbm_learning/pim_tab_occ_count_40-10-03-19-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP/reduce_baseline/pim_tab_occ_count_32-50-02-19-03-2021.csv
+../../../stats/MICRO2021/1P/BN MP+TOM/reduce_baseline_tom/pim_tab_occ_count_48-12-01-30-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP+AIMM/reduce_learning/pim_tab_occ_count_38-10-03-19-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP/streamcluster_baseline/pim_tab_occ_c ount_08-09-10-30-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP+TOM/streamcluster_baseline_tom/pim_tab_occ_count_08-09-10-30-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP+AIMM/streamcluster_learning/pim_tab_occ_count_06-45-03-06-04-2021. csv
+../../../stats/MICRO2021/1P/BNMP/spmv_baseline/pim_tab_occ_count_31-50-02-19-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP+TOM/spmv_baseline_tom/pim_tab_occ_count_43-17-22-29-03-2021.csv
+../../../stats/MICRO2021/1P/BNMP+AIMM/spmv_l earning/pim_tab_occ_count_38-10-03-19-03-2021.csv
