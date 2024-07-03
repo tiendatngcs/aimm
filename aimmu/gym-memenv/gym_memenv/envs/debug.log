@@ -1,0 +1,36 @@
+
+===== Build Memory Network =====
+Memory Size: 16
+Page Size: 4
+Memory size per node: 1.000000
+X Dim: 4
+Y Dim: 4
+Topology: init/topo/mesh_4x4
+Routing Algo: XY
+Number of memory ports: 4
+
+===== Virtual Memory Configurations =====
+text: 400000 - 4ec000
+heap: 6ee000
+stack: 7ffffffdd000
+available space for heap and stak: 7fffff8ef000
+shared: 7ffdd2931000 - 7ffff7ffd000
+
+===== Printing Network Adjecency List ====== 
+0 | 1 4 
+1 | 0 2 5 
+2 | 1 3 6 
+3 | 2 7 
+4 | 0 5 8 
+5 | 1 4 6 9 
+6 | 2 5 7 10 
+7 | 3 6 11 
+8 | 4 9 12 
+9 | 5 8 10 13 
+10 | 6 9 11 14 
+11 | 7 10 15 
+12 | 8 13 
+13 | 9 12 14 
+14 | 10 13 15 
+15 | 11 14 
+

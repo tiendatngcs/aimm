@@ -459,6 +459,7 @@ class NAFLayer(Layer):
                 L, LT = results
             elif K.backend() == 'tensorflow':
                 import tensorflow as tf
+                #tf.keras.__version__ = __version__
 
                 # Number of elements in a triangular matrix.
                 nb_elems = (self.nb_actions * self.nb_actions + self.nb_actions) // 2
@@ -535,6 +536,7 @@ class NAFLayer(Layer):
                 P, _ = theano.scan(fn=fn, sequences=L_flat, outputs_info=outputs_info)
             elif K.backend() == 'tensorflow':
                 import tensorflow as tf
+                #tf.keras.__version__ = __version__
 
                 # Create mask that can be used to gather elements from L_flat and put them
                 # into a diagonal matrix.

@@ -1,4 +1,5 @@
 import tensorflow as tf
+#tf.keras.__version__ = __version__
 
 def my_model():
     model = tf.keras.models.Sequential([

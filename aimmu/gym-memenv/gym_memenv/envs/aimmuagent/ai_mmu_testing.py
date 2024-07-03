@@ -72,6 +72,7 @@ model.add(Activation('relu'))
 model.add(Dense(16))
 model.add(Activation('relu'))
 model.add(Dense(nb_actions, activation='linear'))
+model.add(Flatten())
 
 #######################################################
 #model = Sequential()

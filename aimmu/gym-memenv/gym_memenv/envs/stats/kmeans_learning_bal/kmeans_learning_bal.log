@@ -1,0 +1,345 @@
+BEGIN Configuration File: setup/kmeans_learning_bal.cfg
+//num_proc = 4;
+//mem_size = 16;
+//tlb_size = 256;
+//page_size = 4;
+//x_dim = 4;
+//y_dim = 4;
+//topology = init/topo/mesh_4x4;
+//r_algo = XY;
+//router_stages = 2;
+//max_mcq_size = 16;
+//mem_acc_lat = 100;
+//mem_row_hit_lat = 25;
+//mem_row_miss_lat = 120;
+//mem_queue_size = 256;
+//num_vaults = 64;
+//banks_per_vault = 8;
+//resp_q_size = 512;
+//pkt_buffer_per_vc = 16;
+//req_pkt_size = 16;//in Bytes
+//resp_pkt_size = 72;//in Bytes
+//link_width = 16;//in Bytes
+//port_positions = {0,3,12,15};
+//num_port = 4;
+//router_radix = 6;
+//num_vnet = 3; 
+load_balance_baseline = 1;//load balance off by default
+  
+num_state_subgraph_entries = 8;
+
+perceptron_size = 16;//number of inputs and weights
+neural_circuit_size = 5;//number of perceptrons in the neural circuit 
+neural_cache_threshold = 150.0;//need to fix emperically  
+num_neural_ckt = 32;//this value also needs to be tuned: Power of 2
+max_hop_avg = 8;
+  
+dis_migr = 0;//by default migration is on
+dis_migr_sim = 0;//by default migration is on
+dis_training = 0;//by default training is on
+
+pg_allocation_policy = noalloc;
+//pg_allocation_policy = aimmu;
+
+watch_packet = -1;
+stats_file = kmeans_learning_bal;
+
+//no_roll_over = 1;
+//max_tot_mem_acc = 0x989680;//10,000,000  
+//max_tot_mem_acc = 0x5f5e100;//100,000,000  
+
+//max_tot_rollovers = 0xC8;//200 rollovers should be enough for spmv  
+//max_tot_rollovers = 0xA;//10 rollovers should be enough for spmv  
+//max_tot_rollovers = 0x2;//2 rollovers should be enough for spmv  
+//max_tot_rollovers = 0x1;//1 rollovers should be enough for spmv  
+
+runfile = runlists/kmeans; 
+trace_folder = ../../../../trace_folder/benchmarks/naive-art;
+//backprop_trace_limit = 3354;
+//backprop_trace_limit = 5;
+//lud_trace_limit = 629;
+//pagerank_trace_limit =  595;
+//rbm_trace_limit = 1133;
+//sgemm_trace_limit = 2;
+//spmv_trace_limit = 502;
+
+
+//adaptive_epoch_folder = adaptive_epoch_spmv;//folder to store the adaptive epoch series
+adaptive_epoch_series = adaptive_epoch_;//file/series name
+//hop_avg_folder = hop_avg_spmv;//folder name
+hop_avg_series = hop_avg_;//file/series name
+hop_avg_freq = 100;
+
+//pg_profile_folder = tests/pg_reuse_pred/input/; 
+
+END Configuration File: setup/kmeans_learning_bal.cfg
+
+[WRAPPER] Reding config file: setup/kmeans_learning_bal.cfg
+[SIM] reading runlist ...from runlists/kmeans
+proc: OpsInACube cycle;  -1
+proc: OpsInNearCubes cycle;  -1
+proc: OpsInFarCubes cycle;  -1
+proc: one cycle;  -1
+proc: two cycle;  -1
+proc: lud cycle;  -1
+proc: four cycle;  -1
+proc: dnn_ker cycle;  -1
+proc: dnn_ker_2 cycle;  -1
+proc: backprop cycle;  -1
+proc: lud_trace cycle;  -1
+proc: pagerank cycle;  -1
+proc: rbm cycle;  -1
+proc: sgemm cycle;  -1
+proc: spmv cycle;  -1
+proc: mac cycle;  -1
+proc: reduce cycle;  -1
+proc: kmeans cycle;  0
+proc: svm cycle;  -1
+proc: streamcluster cycle;  -1
+[SIM] Finished reading runlist successfully ...
+Ports are:  0 3 12 15
+mem_size: 16
+page_size: 4
+size_per_node: 1
+x_dim: 4
+y_dim: 4
+ OpsInACube ========================== launch cycle:  -1
+ OpsInFarCubes ========================== launch cycle:  -1
+ OpsInNearCubes ========================== launch cycle:  -1
+ backprop ========================== launch cycle:  -1
+ dnn_ker ========================== launch cycle:  -1
+ dnn_ker_2 ========================== launch cycle:  -1
+ four ========================== launch cycle:  -1
+ kmeans ========================== launch cycle:  0
+Process: kmeans will be launched @0 cycle(s)
+cmp_net deques for core: 0 port: 0
+cmp_net deques for core: 0 port: 1
+cmp_net deques for core: 0 port: 2
+cmp_net deques for core: 0 port: 3
+cmp_net deques for core: 1 port: 0
+cmp_net deques for core: 1 port: 1
+cmp_net deques for core: 1 port: 2
+cmp_net deques for core: 1 port: 3
+cmp_net deques for core: 2 port: 0
+cmp_net deques for core: 2 port: 1
+cmp_net deques for core: 2 port: 2
+cmp_net deques for core: 2 port: 3
+cmp_net deques for core: 3 port: 0
+cmp_net deques for core: 3 port: 1
+cmp_net deques for core: 3 port: 2
+cmp_net deques for core: 3 port: 3
+cmp_net deques for core: 4 port: 0
+cmp_net deques for core: 4 port: 1
+cmp_net deques for core: 4 port: 2
+cmp_net deques for core: 4 port: 3
+cmp_net deques for core: 5 port: 0
+cmp_net deques for core: 5 port: 1
+cmp_net deques for core: 5 port: 2
+cmp_net deques for core: 5 port: 3
+cmp_net deques for core: 6 port: 0
+cmp_net deques for core: 6 port: 1
+cmp_net deques for core: 6 port: 2
+cmp_net deques for core: 6 port: 3
+cmp_net deques for core: 7 port: 0
+cmp_net deques for core: 7 port: 1
+cmp_net deques for core: 7 port: 2
+cmp_net deques for core: 7 port: 3
+cmp_net deques for core: 8 port: 0
+cmp_net deques for core: 8 port: 1
+cmp_net deques for core: 8 port: 2
+cmp_net deques for core: 8 port: 3
+cmp_net deques for core: 9 port: 0
+cmp_net deques for core: 9 port: 1
+cmp_net deques for core: 9 port: 2
+cmp_net deques for core: 9 port: 3
+cmp_net deques for core: 10 port: 0
+cmp_net deques for core: 10 port: 1
+cmp_net deques for core: 10 port: 2
+cmp_net deques for core: 10 port: 3
+cmp_net deques for core: 11 port: 0
+cmp_net deques for core: 11 port: 1
+cmp_net deques for core: 11 port: 2
+cmp_net deques for core: 11 port: 3
+cmp_net deques for core: 12 port: 0
+cmp_net deques for core: 12 port: 1
+cmp_net deques for core: 12 port: 2
+cmp_net deques for core: 12 port: 3
+cmp_net deques for core: 13 port: 0
+cmp_net deques for core: 13 port: 1
+cmp_net deques for core: 13 port: 2
+cmp_net deques for core: 13 port: 3
+cmp_net deques for core: 14 port: 0
+cmp_net deques for core: 14 port: 1
+cmp_net deques for core: 14 port: 2
+cmp_net deques for core: 14 port: 3
+cmp_net deques for core: 15 port: 0
+cmp_net deques for core: 15 port: 1
+cmp_net deques for core: 15 port: 2
+cmp_net deques for core: 15 port: 3
+text: 400000 - 4ec000
+heap: 6ee000
+stack: 7ffffffdd000
+available space for heap and stack: 7fffff8ef000
+shared: 7ffdd2931000 - 7ffff7ffd000
+kmeans trace path: ../../../../trace_folder/benchmarks/naive-art
+folder path = ../../../../trace_folder/benchmarks/naive-art bench: kmeans trace limit: 350
+++++++++++++++++++kmeans  PID: 0
+ lud ========================== launch cycle:  -1
+ lud_trace ========================== launch cycle:  -1
+ mac ========================== launch cycle:  -1
+ one ========================== launch cycle:  -1
+ pagerank ========================== launch cycle:  -1
+ rbm ========================== launch cycle:  -1
+ reduce ========================== launch cycle:  -1
+ sgemm ========================== launch cycle:  -1
+ spmv ========================== launch cycle:  -1
+ streamcluster ========================== launch cycle:  -1
+ svm ========================== launch cycle:  -1
+ two ========================== launch cycle:  -1
+recoding data for: kmeans_learning_bal
+the series name: opc_avg_07-38-14-03-07-2024.csv
+recoding data for: kmeans_learning_bal
+the series name: hop_avg_07-38-14-03-07-2024.csv
+recoding data for: kmeans_learning_bal
+the series name: migr_count_07-38-14-03-07-2024.csv
+recoding data for: kmeans_learning_bal
+the series name: mig_freq_avg_07-38-14-03-07-2024.csv
+recoding data for: kmeans_learning_bal
+the series name: pim_tab_occ_count_07-38-14-03-07-2024.csv
+recoding data for: kmeans_learning_bal
+the series name: active_pages_07-38-14-03-07-2024.csv
+ init/topo/mesh_4x4.ini
+reading topology ...from init/topo/mesh_4x4.ini
+
+<<<<<<<<<<<<<<<<<<< creating physical memory frames >>>>>>>>>>>>>>>>>>>
+ x_dim: 4 y_dim: 4 _mem_size: 16 _page_frame_size: 4 _num_nodes: 16 _size_per_node: 1 _tot_frame_per_cube: 262144
+|||||||||||||||||||||||| _unallocated_frames: 262144
+|||||||||||||||||||||||| _unallocated_frames: 262144
+|||||||||||||||||||||||| _unallocated_frames: 262144
+|||||||||||||||||||||||| _unallocated_frames: 262144
+|||||||||||||||||||||||| _unallocated_frames: 262144
+|||||||||||||||||||||||| _unallocated_frames: 262144
+|||||||||||||||||||||||| _unallocated_frames: 262144
+|||||||||||||||||||||||| _unallocated_frames: 262144
+|||||||||||||||||||||||| _unallocated_frames: 262144
+|||||||||||||||||||||||| _unallocated_frames: 262144
+|||||||||||||||||||||||| _unallocated_frames: 262144
+|||||||||||||||||||||||| _unallocated_frames: 262144
+|||||||||||||||||||||||| _unallocated_frames: 262144
+|||||||||||||||||||||||| _unallocated_frames: 262144
+|||||||||||||||||||||||| _unallocated_frames: 262144
+|||||||||||||||||||||||| _unallocated_frames: 262144
+ migration candiate queue size: 1
+[MMU] Migration Queue size: 1 process
+cmp_net deques for core: 0 port: 0
+cmp_net deques for core: 0 port: 1
+cmp_net deques for core: 0 port: 2
+cmp_net deques for core: 0 port: 3
+cmp_net deques for core: 1 port: 0
+cmp_net deques for core: 1 port: 1
+cmp_net deques for core: 1 port: 2
+cmp_net deques for core: 1 port: 3
+cmp_net deques for core: 2 port: 0
+cmp_net deques for core: 2 port: 1
+cmp_net deques for core: 2 port: 2
+cmp_net deques for core: 2 port: 3
+cmp_net deques for core: 3 port: 0
+cmp_net deques for core: 3 port: 1
+cmp_net deques for core: 3 port: 2
+cmp_net deques for core: 3 port: 3
+cmp_net deques for core: 4 port: 0
+cmp_net deques for core: 4 port: 1
+cmp_net deques for core: 4 port: 2
+cmp_net deques for core: 4 port: 3
+cmp_net deques for core: 5 port: 0
+cmp_net deques for core: 5 port: 1
+cmp_net deques for core: 5 port: 2
+cmp_net deques for core: 5 port: 3
+cmp_net deques for core: 6 port: 0
+cmp_net deques for core: 6 port: 1
+cmp_net deques for core: 6 port: 2
+cmp_net deques for core: 6 port: 3
+cmp_net deques for core: 7 port: 0
+cmp_net deques for core: 7 port: 1
+cmp_net deques for core: 7 port: 2
+cmp_net deques for core: 7 port: 3
+cmp_net deques for core: 8 port: 0
+cmp_net deques for core: 8 port: 1
+cmp_net deques for core: 8 port: 2
+cmp_net deques for core: 8 port: 3
+cmp_net deques for core: 9 port: 0
+cmp_net deques for core: 9 port: 1
+cmp_net deques for core: 9 port: 2
+cmp_net deques for core: 9 port: 3
+cmp_net deques for core: 10 port: 0
+cmp_net deques for core: 10 port: 1
+cmp_net deques for core: 10 port: 2
+cmp_net deques for core: 10 port: 3
+cmp_net deques for core: 11 port: 0
+cmp_net deques for core: 11 port: 1
+cmp_net deques for core: 11 port: 2
+cmp_net deques for core: 11 port: 3
+cmp_net deques for core: 12 port: 0
+cmp_net deques for core: 12 port: 1
+cmp_net deques for core: 12 port: 2
+cmp_net deques for core: 12 port: 3
+cmp_net deques for core: 13 port: 0
+cmp_net deques for core: 13 port: 1
+cmp_net deques for core: 13 port: 2
+cmp_net deques for core: 13 port: 3
+cmp_net deques for core: 14 port: 0
+cmp_net deques for core: 14 port: 1
+cmp_net deques for core: 14 port: 2
+cmp_net deques for core: 14 port: 3
+cmp_net deques for core: 15 port: 0
+cmp_net deques for core: 15 port: 1
+cmp_net deques for core: 15 port: 2
+cmp_net deques for core: 15 port: 3
+[SIM] reading MAP from--> filepath = tests/pg_reuse_pred/input/kmeans.pg
+[SIM] finished profile tests/pg_reuse_pred/input/kmeans.pg
+[SIM] creating stats variables ...
+[SIM] ------ Initilization Done in SIM ------ 
+*** unable to create stats directory ***
++++ WARNING: directory is already there | results will be overwritten +++
+[WRAPPER MMU] ------ Constructor Finished -------- 
+
+clk: 10000 NumOP: 5660 PimOpRet: 9950 SleepTime: 8 MigIncompTime: 0 (0) MigrQSize: 0 Mem:16632 RetMemAcc: 9950 failedresp: 0 Retiredpkt: 24871 m_cube_empry: 0 m_cube_zero: 141010 pim_tab_full: 14401 hops: 32778 retry_cyc: 10289 pg miss: 26 tr_buff_fill: 0 freelist entries: 0 proc stall: 4332 can't inject pim: 29335 has no pim: 712882 can't inject resp: 18446744073709541666 has no resp: 790050 compute_migr_size: 16 call_learning_r: 0 possible_cand_list_empty: -nan pim_op_lat: 926.112 injection rate: 0.552055 forward_q_size: 0 pim_req_q_size: 0 mem_cube_size: 0 resp_queue_size: 0 inflight forward_pkt: 2 inflight pkts: 1711 pim_r-tripq_size: 0 l2cache_hitrate: -nan l2_access: 0 l2_occupancy: 0 rollovers: 0
+action hist: []
+[0:  1.06221 | 1.06221 | 1.06221 | 0.995 ] 
+aimmu-config >>>>   >>>>  >>>>>  setup/kmeans_learning_bal.cfg
+graph folder:  stats/kmeans_learning_bal
+[Errno 17] File exists: 'stats/kmeans_learning_bal'
+============= configurations on agent side: START ===============
+Number of frames per cube:  262144
+Number of processes:  1
+============= configurations on agent side: END ===============
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ flatten (Flatten)           (None, 128)               0         
+                                                                 
+ dense (Dense)               (None, 256)               33024     
+                                                                 
+ dense_1 (Dense)             (None, 128)               32896     
+                                                                 
+ dense_2 (Dense)             (None, 64)                8256      
+                                                                 
+ dense_3 (Dense)             (None, 32)                2080      
+                                                                 
+ dense_4 (Dense)             (None, 16)                528       
+                                                                 
+ dense_5 (Dense)             (None, 16)                272       
+                                                                 
+ dense_6 (Dense)             (None, 8)                 136       
+                                                                 
+ flatten_1 (Flatten)         (None, 8)                 0         
+                                                                 
+=================================================================
+Total params: 77192 (301.53 KB)
+Trainable params: 77192 (301.53 KB)
+Non-trainable params: 0 (0.00 Byte)
+_________________________________________________________________
+None
+[STATS] *** destructor empty ***
+[STATS] *** destructor empty ***

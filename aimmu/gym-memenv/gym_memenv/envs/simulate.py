@@ -8,13 +8,14 @@ from keras import layers
 from keras.models import Sequential
 from keras.layers import Dense, Activation, Flatten, Bidirectional, LSTM, Embedding, Dropout, Conv1D, Conv2D, Reshape
 from keras.layers import TimeDistributed, GlobalAveragePooling2D, Lambda, ConvLSTM2D
-from keras.constraints import maxnorm
-from keras.layers.convolutional import MaxPooling2D
-from keras.utils import np_utils
+from tensorflow.keras.constraints import MaxNorm
+from keras.layers import MaxPooling2D
+from keras import utils
 from keras.optimizers import Adam
 from keras import initializers 
 from aimmuagent.aimmu_agent import AIMMUAgent
 import tensorflow as tf
+#tf.keras.__version__ = __version__
 
 from rl.policy import EpsGreedyQPolicy
 from rl.memory import SequentialMemory
@@ -42,7 +43,7 @@ class Sim:
     #model.add(MaxPooling2D(pool_size=(2,2)))
     
     #model.add(Flatten())
-    model.add(Flatten(input_shape=(1,) + env.observation_space.shape))
+    model.add(Flatten(input_shape=(1,1) + env.observation_space.shape))
     model.add(Dense(256, activation = 'relu'))
     model.add(Dense(128, activation = 'relu'))
     model.add(Dense(64, activation = 'relu'))
@@ -51,6 +52,7 @@ class Sim:
     model.add(Dense(16, activation = 'relu'))
     #model.add(Dense(nb_actions, activation='softmax'))
     model.add(Dense(nb_actions, activation='linear'))
+    model.add(Flatten())
    
 
     print(model.summary())
