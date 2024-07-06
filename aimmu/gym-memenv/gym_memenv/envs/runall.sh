@@ -1,4 +1,28 @@
 
+
+mkdir -p stats/spmv_baseline
+python sim_no_agent.py --aimmu-config setup/new_spmv_baseline.cfg | tee stats/spmv_baseline/spmv_baseline.log & 
+mkdir -p stats/pagerank_baseline
+python sim_no_agent.py --aimmu-config setup/new_pagerank_baseline.cfg | tee stats/pagerank_baseline/pagerank_baseline.log & 
+mkdir -p stats/backprop_baseline
+python sim_no_agent.py --aimmu-config setup/new_backprop_baseline.cfg  | tee stats/backprop_baseline/backprop_baseline.log &
+mkdir -p stats/rbm_baseline
+python sim_no_agent.py --aimmu-config setup/new_rbm_baseline.cfg | tee stats/rbm_baseline/rbm_baseline.log & 
+mkdir -p stats/lud_baseline
+python sim_no_agent.py --aimmu-config setup/new_lud_baseline.cfg | tee stats/lud_baseline/lud_baseline.log  &
+# mkdir -p stats/mac_baseline
+# python sim_no_agent.py --aimmu-config setup/new_mac_baseline.cfg | tee stats/mac_baseline/mac_baseline.log &
+# mkdir -p stats/reduce_baseline
+# python sim_no_agent.py --aimmu-config setup/new_reduce_baseline.cfg | tee stats/reduce_baseline/reduce_baseline.log &
+# mkdir -p stats/kmeans_baseline
+# python sim_no_agent.py --aimmu-config setup/new_kmeans_baseline.cfg | tee stats/kmeans_baseline/kmeans_baseline.log & 
+mkdir -p stats/sgemm_baseline
+python sim_no_agent.py --aimmu-config setup/new_sgemm_baseline.cfg | tee stats/sgemm_baseline/sgemm_baseline.log &
+# mkdir -p stats/svm_baseline
+# python sim_no_agent.py --aimmu-config setup/new_svm_baseline.cfg | tee stats/svm_baseline/svm_baseline.log &
+# mkdir -p stats/streamcluster_baseline
+# python sim_no_agent.py --aimmu-config setup/new_streamcluster_baseline.cfg | tee stats/streamcluster_baseline/streamcluster_baseline.log & 
+
 #============================================================================================#
 #||||||||||||||||||||||||||||||||| BNMP  ||||||||||||||||||||||||||||||||||||||||||||||||||||#
 #============================================================================================#
@@ -157,29 +181,28 @@
 #||||||||||||||||||||||||||||||||| LDB+AIMM ||||||||||||||||||||||||||||||||||||||||||||||||||#
 #============================================================================================#
 
-mkdir stats/backprop_learning_bal
-python simulate.py --aimmu-config setup/backprop_learning_bal.cfg  | tee stats/backprop_learning_bal/backprop_learning_bal.log &
-mkdir stats/spmv_learning_bal
-python simulate.py --aimmu-config setup/spmv_learning_bal.cfg | tee stats/spmv_learning_bal/spmv_learning_bal.log &  
-mkdir stats/pagerank_learning_bal
-python simulate.py --aimmu-config setup/pagerank_learning_bal.cfg | tee stats/pagerank_learning_bal/pagerank_learning_bal.log & 
-mkdir stats/rbm_learning_bal
-python simulate.py --aimmu-config setup/rbm_learning_bal.cfg | tee stats/rbm_learning_bal/rbm_learning_bal.log & 
-mkdir stats/lud_learning_bal
-python simulate.py --aimmu-config setup/lud_learning_bal.cfg | tee stats/lud_learning_bal/lud_learning_bal.log  &
-mkdir stats/mac_learning_bal
-python simulate.py --aimmu-config setup/mac_learning_bal.cfg | tee stats/mac_learning_bal/mac_learning_bal.log & 
-mkdir stats/reduce_learning_bal
-python simulate.py --aimmu-config setup/reduce_learning_bal.cfg | tee stats/reduce_learning_bal/reduce_learning_bal.log  &
-mkdir stats/kmeans_learning_bal
-python simulate.py --aimmu-config setup/kmeans_learning_bal.cfg | tee stats/kmeans_learning_bal/kmeans_learning_bal.log & 
-mkdir stats/streamcluster_learning_bal
-python simulate.py --aimmu-config setup/streamcluster_learning_bal.cfg | tee stats/streamcluster_learning_bal/streamcluster_learning_bal.log &
-
-##mkdir stats/sgemm_learning_bal
-##python simulate.py --aimmu-config setup/sgemm_learning_bal.cfg | tee stats/sgemm_learning_bal/sgemm_learning_bal.log &
-##mkdir stats/svm_learning_bal
-##python simulate.py --aimmu-config setup/svm_learning_bal.cfg | tee stats/svm_learning_bal/svm_learning_bal.log &
+# mkdir stats/backprop_learning_bal
+# python simulate.py --aimmu-config setup/backprop_learning_bal.cfg  | tee stats/backprop_learning_bal/backprop_learning_bal.log &
+# mkdir stats/spmv_learning_bal
+# python simulate.py --aimmu-config setup/spmv_learning_bal.cfg | tee stats/spmv_learning_bal/spmv_learning_bal.log &  
+# mkdir stats/pagerank_learning_bal
+# python simulate.py --aimmu-config setup/pagerank_learning_bal.cfg | tee stats/pagerank_learning_bal/pagerank_learning_bal.log & 
+# mkdir stats/rbm_learning_bal
+# python simulate.py --aimmu-config setup/rbm_learning_bal.cfg | tee stats/rbm_learning_bal/rbm_learning_bal.log & 
+# mkdir stats/lud_learning_bal
+# python simulate.py --aimmu-config setup/lud_learning_bal.cfg | tee stats/lud_learning_bal/lud_learning_bal.log  &
+# mkdir stats/mac_learning_bal
+# python simulate.py --aimmu-config setup/mac_learning_bal.cfg | tee stats/mac_learning_bal/mac_learning_bal.log & 
+# mkdir stats/reduce_learning_bal
+# python simulate.py --aimmu-config setup/reduce_learning_bal.cfg | tee stats/reduce_learning_bal/reduce_learning_bal.log  &
+# mkdir stats/kmeans_learning_bal
+# python simulate.py --aimmu-config setup/kmeans_learning_bal.cfg | tee stats/kmeans_learning_bal/kmeans_learning_bal.log & 
+# mkdir stats/streamcluster_learning_bal
+# python simulate.py --aimmu-config setup/streamcluster_learning_bal.cfg | tee stats/streamcluster_learning_bal/streamcluster_learning_bal.log &
+# mkdir stats/sgemm_learning_bal
+# python simulate.py --aimmu-config setup/sgemm_learning_bal.cfg | tee stats/sgemm_learning_bal/sgemm_learning_bal.log &
+# mkdir stats/svm_learning_bal
+# python simulate.py --aimmu-config setup/svm_learning_bal.cfg | tee stats/svm_learning_bal/svm_learning_bal.log &
 
 
 #============================================================================================#

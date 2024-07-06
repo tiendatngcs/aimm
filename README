@@ -30,6 +30,10 @@ Tools Used:
 3. keras-rl2 == 1.0.5
 4. gym == 0.17.1
 5. aimmu-sim (in-house)
+6. matplotlib
+7. networkx
+8. gensim
+9. pybind11
 
 -----------------------------
 Setup suggestions/directions:
