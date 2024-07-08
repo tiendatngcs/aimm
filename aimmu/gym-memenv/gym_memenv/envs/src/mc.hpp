@@ -50,6 +50,7 @@ class MemoryController{
     int _num_port;
     int _max_mcq_size;
     bool _disable_training;
+    bool _periodic_break;
     bool _pei_enabled;
     vector<int> _port;//holds the ports
     vector<vector<packet *> > _mcq;

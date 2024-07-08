@@ -110,6 +110,7 @@ class Sim
     vector<int>_num_ops_per_proc;
     bool _disable_migration; 
     bool _disable_training;
+    bool _periodic_break;
     int _max_hop_avg;
     unsigned long _max_tot_mem_acc_for_sim;//maximum operation to simulate
     bool _no_roll_over;

@@ -69,7 +69,8 @@ void MemoryController::set_up(const Configuration &config){
   _max_mcq_size = config.GetInt("max_mcq_size");
   _num_port = config.GetInt("num_port");
   _port = config.GetIntArray("port_positions");
-  _disable_training = (config.GetInt("dis_training")>=1);  
+  _disable_training = (config.GetInt("dis_training")>=1);
+  _periodic_break = (config.GetInt("periodic_break")>=1);  
   _pei_enabled = config.GetInt("pei_enabled")>0;
   _mcq.resize(_num_port);
   create_mem(config);

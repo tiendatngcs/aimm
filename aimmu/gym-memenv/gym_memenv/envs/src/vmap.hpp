@@ -175,6 +175,7 @@ class v_map_use
     int _frame_size;
     unsigned long _tot_frame_per_cube;
     bool _disable_training;  
+    bool _periodic_break;
     
     bool _done;//once the application is done --> one episode
    

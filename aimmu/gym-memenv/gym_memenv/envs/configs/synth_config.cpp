@@ -113,6 +113,7 @@ SynthConfig::SynthConfig()
   _int_map["dis_migr"] = 0;//by default migration is on
   _int_map["dis_migr_sim"] = 0;//if enabled, then actual packets won't be sent
   _int_map["dis_training"] = 0;//by default training is on
+  _int_map["periodic_break"] = 0;// off by default
   _int_map["dis_results_forward_sim"] = 0;//overhead of computation migration
   _str_map["pg_allocation_policy"] = "baseline";
   _int_map["tom_phy_cube_remap"] = 0;//by default "tom" is off

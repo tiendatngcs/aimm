@@ -211,7 +211,8 @@ Sim::Sim(const Configuration& config)
   //_num_proc = config.GetInt("num_proc");  // depricated
   _trace_folder = config.GetStr("trace_folder");  
   _disable_migration = (config.GetInt("dis_migr")>=1);  
-  _disable_training = (config.GetInt("dis_training")>=1);  
+  _disable_training = (config.GetInt("dis_training")>=1); 
+  _periodic_break = (config.GetInt("periodic_break")>=1);
   _max_hop_avg = config.GetInt("max_hop_avg");
 
   string sim_type = config.GetStr("sim_type");
@@ -554,8 +555,14 @@ vector<double> Sim::run_gen(long epoch_length){
         cout<<"[SIM] breaking as it is done ... "<<endl;
         break;
       }
+    } else if (_periodic_break) {
+      if(elapsed_clk > epoch_length){
+        num_epoch++;
+        break;
+      }
     }
     else{
+      // runs until the end
       if(print_stats_for_rollover){
         cout<<"[SIM] Printing stats after rollover ..."<<endl;
         print_stats_for_rollover = false;

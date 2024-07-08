@@ -76,12 +76,10 @@ def main():
   ENV_NAME = 'memenv-v0'
   # Get the environment and extract the number of actions.
   env = gym.make(ENV_NAME)
-  nb_actions = env.action_space.n
-  env.get_simpptr(args)
-  env.reset()
-  for i in range(10000000):
-    print("Epoch", i)
-    env.step(1)
+#   nb_actions = env.action_space.n
+#   env.get_simpptr(args)
+#   env.reset()
+  env.run_epoch(args)
   
 
 if __name__ == '__main__':

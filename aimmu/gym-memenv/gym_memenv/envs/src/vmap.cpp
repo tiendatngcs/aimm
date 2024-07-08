@@ -53,6 +53,7 @@ v_map_use::v_map_use(const Configuration& config)
   _frame_size =  config.GetInt("page_size");
   _tot_frame_per_cube = (_size_per_node * 1024 * 1024) / _frame_size;  
   _disable_training = (config.GetInt("dis_training")>=1);  
+  _periodic_break = (config.GetInt("periodic_break")>=1);
 
   _baseline_load_bal = config. GetInt("load_balance_baseline")>0;//load balance off by default
 

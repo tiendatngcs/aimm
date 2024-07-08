@@ -216,6 +216,19 @@ class MemEnv(gym.Env):
     done = self.obj.finished()
 
     return self.state, self.reward, done, {} #done will be true when new graph is taken up
+  
+  def run_epoch(self, args, print_each=10000):
+    print("--------->>>> Custom run of the simulation without RL agent")
+    self.obj = rlmmu_pybind.wrapper_mmu(args.aimmu_config)
+    self.FeatureExt = FeatureExtract(args)
+    epoch_count = 0
+    while (True):
+      # run 256 trace step
+      self.obj.run()
+      if (epoch_count % print_each == 0):
+        print("--------->>>> Printing stats")
+        self.print_stats()
+      epoch_count+=1
 
   def reset(self):
     print("xxxxxxxxxxxxxxxxxxxxxxxxxx RESETING ALL THE STATES XXXXXXXXXXXXXXXXXXXXXXXX")
