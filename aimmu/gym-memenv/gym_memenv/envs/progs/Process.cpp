@@ -45,3 +45,8 @@ bool Process::ReadyToRun(const unsigned long global_clock) const
   //cout<<"[Process] ready to run? "<<is_ready<<endl;
   return is_ready;
 }
+
+
+unsigned long Process::count_active_pages() {
+  return _vmu->count_active_pages();
+}

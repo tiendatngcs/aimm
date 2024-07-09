@@ -759,6 +759,6 @@ void v_map_use::clear_memory(int pid){
   }
 }
 
-unsigned long long v_map_use::count_active_pages() {
+unsigned long v_map_use::count_active_pages() {
   return _l_v2p->CountActivePages();
 }

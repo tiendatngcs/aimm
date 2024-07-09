@@ -117,7 +117,7 @@ class PageDirTab {//level-2 contains pointers to the page table
     int getIndex(const unsigned long long vaddr);
     bool update_page_frame(unsigned long, int);
     bool free_page_frame();
-    unsigned long long count_active_pages();
+    unsigned long count_active_pages();
 };
 
 class PageDirPtrTab {//level-3 contains pointers to the page directory
@@ -130,7 +130,7 @@ class PageDirPtrTab {//level-3 contains pointers to the page directory
     bool searchEntry(int, unsigned long long);//pass the virtual address
     bool update_page_frame(unsigned long, int);
     bool free_page_frame();
-    unsigned long long count_active_pages();
+    unsigned long count_active_pages();
 };
 
 class PageMapL4 {//level-4 contains pointers to the page directory pointer table
@@ -143,7 +143,7 @@ class PageMapL4 {//level-4 contains pointers to the page directory pointer table
     bool searchEntry(int, unsigned long long);//pass the virtual address
     bool update_page_frame(unsigned long, int);
     bool free_page_frame();
-    unsigned long long count_active_pages();
+    unsigned long count_active_pages();
 };
 
 class vir2phy {
@@ -156,7 +156,7 @@ class vir2phy {
     unsigned long long GetPhyFrameNum(int, unsigned long long, unsigned long long);//pass the pid,
     bool DoPageMigration(unsigned long vaddr, int new_cube);
     bool FreeAllPageFrames();
-    unsigned long long CountActivePages();
+    unsigned long CountActivePages();
     //virtual address, and physical address  
 };
 

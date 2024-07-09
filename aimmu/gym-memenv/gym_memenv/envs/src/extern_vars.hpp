@@ -115,6 +115,7 @@ extern long double stats_total_L3_tables_created;
 extern long double stats_tlb_hit;
 extern long double stats_tlb_miss;
 extern long double stats_tlb_repl;
+extern unsigned long stats_total_active_pages;
 /*
  * Memory
  */

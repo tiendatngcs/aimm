@@ -458,8 +458,8 @@ bool vir2phy::FreeAllPageFrames(){
  return success;
 }
 
-unsigned long long vir2phy::CountActivePages() {
-  unsigned long long page_count = 0;
+unsigned long vir2phy::CountActivePages() {
+  unsigned long page_count = 0;
   for(int PML_index=0; PML_index < 512; PML_index++){ 
     if(PML[PML_index].valid==true){
       page_count += PML[PML_index].count_active_pages();
@@ -480,8 +480,8 @@ bool PageMapL4::free_page_frame(){
  return success;
 }
 
-unsigned long long PageMapL4::count_active_pages() {
-  unsigned long long page_count = 0;
+unsigned long PageMapL4::count_active_pages() {
+  unsigned long page_count = 0;
   for(int PDPT_index=0; PDPT_index < 512; PDPT_index++){ 
   if(PDPT[PDPT_index].valid==true){
     page_count += PDPT[PDPT_index].count_active_pages();
@@ -502,8 +502,8 @@ bool PageDirPtrTab::free_page_frame(){
  return success;
 }
 
-unsigned long long PageDirPtrTab::count_active_pages() {
-  unsigned long long page_count = 0;
+unsigned long PageDirPtrTab::count_active_pages() {
+  unsigned long page_count = 0;
   for(int PDT_index=0; PDT_index < 512; PDT_index++){ 
   if(PDT[PDT_index].valid==true){
     page_count += PDT[PDT_index].count_active_pages();
@@ -529,8 +529,8 @@ bool PageDirTab::free_page_frame(){
  return success;
 }
 
-unsigned long long PageDirTab::count_active_pages() {
-  unsigned long long page_count = 0;
+unsigned long PageDirTab::count_active_pages() {
+  unsigned long page_count = 0;
   for(int PT_index=0; PT_index < 512; PT_index++){ 
     if(PT[PT_index].valid==true){
       page_count += 1;

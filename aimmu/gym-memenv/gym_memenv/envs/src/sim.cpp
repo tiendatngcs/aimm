@@ -135,6 +135,7 @@ long double stats_total_L3_tables_created=0;
 long double stats_tlb_hit=0;
 long double stats_tlb_miss=0;
 long double stats_tlb_repl=0;
+unsigned long stats_total_active_pages = 0;
 
 /*
  * Memory
@@ -557,6 +558,10 @@ vector<double> Sim::run_gen(long epoch_length){
       }
     } else if (_periodic_break) {
       if(elapsed_clk > epoch_length){
+        // only run one program at a time
+        assert(_total_processes == 1);
+        assert(cores[0].pt!=nullptr);
+        stats_total_active_pages = cores[0].pt->count_active_pages();
         num_epoch++;
         break;
       }

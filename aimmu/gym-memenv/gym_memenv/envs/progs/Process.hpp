@@ -24,6 +24,7 @@ class Process
     virtual string get_process_name();
     void SetLaunchCycle(const long cycle);
     bool ReadyToRun(const unsigned long global_clock) const;
+    unsigned long count_active_pages();
 
   protected:
     v_map_use* _vmu;
