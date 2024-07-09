@@ -110,6 +110,7 @@ class v_map_use
       _done = false;
       return l_d;
     }
+    unsigned long long count_active_pages();
 
     
     /*************************************************/
