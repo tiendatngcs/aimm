@@ -217,7 +217,7 @@ class MemEnv(gym.Env):
 
     return self.state, self.reward, done, {} #done will be true when new graph is taken up
   
-  def run_epoch(self, args, print_each=10000):
+  def run_epoch(self, args, print_each=1):
     print("--------->>>> Custom run of the simulation without RL agent")
     self.obj = rlmmu_pybind.wrapper_mmu(args.aimmu_config)
     self.FeatureExt = FeatureExtract(args)
