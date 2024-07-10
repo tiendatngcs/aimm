@@ -77,6 +77,7 @@ DataCollectHook * dch_mig_freq = new DataCollectHook();//TODO: need to set the v
 DataCollectHook * dch_pimtab = new DataCollectHook();
 DataCollectHook * dch_active_pages = new DataCollectHook();
 unordered_map<unsigned long, unsigned long>active_pages_epochwise;
+unordered_map<unsigned long, unsigned long>page_access_count_epochwise;
 vector<map<unsigned long, PageInfo *> >page_info_map;//stores all the data regarding pages
 unordered_map<unsigned long, unsigned long>page_info_cache;//only meta data for replacment policy
 
@@ -136,6 +137,7 @@ long double stats_tlb_hit=0;
 long double stats_tlb_miss=0;
 long double stats_tlb_repl=0;
 unsigned long stats_total_active_pages = 0;
+unsigned long stats_num_pages_accessed_last_epoch = 0;
 
 /*
  * Memory
@@ -404,6 +406,7 @@ vector<double> Sim::run_gen(long epoch_length){
   long mig_num = 0;
   long elapsed_clk = 0;
   int pid = -1;
+  page_access_count_epochwise.clear();
   do{
     /*
      * Simulating processor pipeline for all the cores for one cycle
@@ -557,11 +560,12 @@ vector<double> Sim::run_gen(long epoch_length){
         break;
       }
     } else if (_periodic_break) {
-      if(elapsed_clk > epoch_length){
+      if(elapsed_clk >= epoch_length){
         // only run one program at a time
         assert(_total_processes == 1);
         assert(cores[0].pt!=nullptr);
         stats_total_active_pages = cores[0].pt->count_active_pages();
+        stats_num_pages_accessed_last_epoch = page_access_count_epochwise.size();
         num_epoch++;
         break;
       }
@@ -586,7 +590,7 @@ vector<double> Sim::run_gen(long epoch_length){
   }while(num_proc_finished < _total_processes && global_clock<100000000000);//processes will be done !!!
   
   call_learning++; 
-  //cout<<"========================================================== returning to agent "<<endl;
+  // cout<<"========================================================== returning to agent "<<endl;
   return app_wise_opc;
 }
 

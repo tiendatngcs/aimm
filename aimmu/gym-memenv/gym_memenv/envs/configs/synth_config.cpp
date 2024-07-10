@@ -143,7 +143,7 @@ SynthConfig::SynthConfig()
   _int_map["join_flow_freq"] = 1000; //join flow after each thousands instructions
 
   //_int_map["backprop_trace_limit"] = 3354;
-  _int_map["backprop_trace_limit"] = 350;
+  _int_map["backprop_trace_limit"] = 3354;
   _int_map["lud_trace_limit"] = 629;
   _int_map["pagerank_trace_limit"] =  595;
   _int_map["rbm_trace_limit"] = 1133;
@@ -154,6 +154,14 @@ SynthConfig::SynthConfig()
   _int_map["sgemm_trace_limit"] = 350;//we have around 10000
   _int_map["svm_trace_limit"] = 350;//we have around 10000
   _int_map["streamcluster_trace_limit"] = 350;//we have around 10000
+
+
+// backprop_trace_limit = 3354;
+// lud_trace_limit = 629;
+// pagerank_trace_limit =  595;
+// rbm_trace_limit = 1133;
+// sgemm_trace_limit = 1;
+// spmv_trace_limit = 503;
 
   /*************************************************/
   /*              Time Series Plot --> graphs      */

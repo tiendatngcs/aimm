@@ -62,6 +62,7 @@ void reg_stats::create_stats(){
   g_stats.create_stats("total_L2_tables_created", "2^18 table, maps 1GB/ea, 2^27 entries");
   g_stats.create_stats("total_L3_tables_created", "2^27 table, maps 2MB/ea, 2^36 extries");
   g_stats.create_stats("total_active_pages", "Number of active/valid pages in 4-level page table");
+  g_stats.create_stats("num_pages_accessed_last_epoch", "Number of pages that got accessed in the last epoch");
   /*
    * Memory
    */
@@ -154,6 +155,7 @@ void reg_stats::update_stats(){
   g_stats.update("total_L2_tables_created",stats_total_L2_tables_created);
   g_stats.update("total_L3_tables_created",stats_total_L3_tables_created);
   g_stats.update("total_active_pages", stats_total_active_pages);
+  g_stats.update("num_pages_accessed_last_epoch", stats_num_pages_accessed_last_epoch);
   /*
    * Memory
    */  

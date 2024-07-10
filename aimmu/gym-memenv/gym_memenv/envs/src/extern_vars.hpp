@@ -116,6 +116,7 @@ extern long double stats_tlb_hit;
 extern long double stats_tlb_miss;
 extern long double stats_tlb_repl;
 extern unsigned long stats_total_active_pages;
+extern unsigned long stats_num_pages_accessed_last_epoch;
 /*
  * Memory
  */
@@ -187,6 +188,7 @@ extern vector<map<unsigned long, int> >compute_migration_cand_list;
 extern vector<double>app_wise_opc;
 
 extern unordered_map<unsigned long, unsigned long>active_pages_epochwise;
+extern unordered_map<unsigned long, unsigned long>page_access_count_epochwise;
 
 extern unsigned long stats_possible_cand_list_empty;
 extern unsigned long stats_roundtrip_pimq_size;

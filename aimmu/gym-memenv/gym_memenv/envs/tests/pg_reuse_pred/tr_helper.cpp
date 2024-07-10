@@ -48,6 +48,7 @@ trace_entry trace_helper::get_memop(){
     _file_num++;
     t_empty = true;
     if(_file_num > _trace_limit){
+      cout << ">>>>>>>>>>>> End of trace File num:" << _file_num << "trace_limit:" << _trace_limit << endl;
       _file_num = 0;//reset file number 
       exit(0);
     }

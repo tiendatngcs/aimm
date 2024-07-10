@@ -258,6 +258,7 @@ class MemoryNetwork{
     int mesh_neighbor_closer_to_dest(int current, int dest);
     void step();
     void evaluate(int);
+    void end_of_epoch_reset();
     void handle_regular_pkts_at_dest(int node, int port, packet *pkt);
     void retire(int);//once the memory access is completed
     bool can_inject(int node, packet *pkt, int NI_id);

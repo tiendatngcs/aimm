@@ -73,6 +73,7 @@ class Page {
     int get_bits();
     void reset_bits();
     bool valid;
+    unsigned long access_count;
     bool update_pt(unsigned long new_frame){
       page_frame_number = new_frame;
       return true;
