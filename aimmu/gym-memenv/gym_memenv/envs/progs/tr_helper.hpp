@@ -32,6 +32,7 @@ class trace_entry{
       _src1 = stol(st[4]);
       _src2 = stol(st[5]);
       _reset = false;
+      _end_of_trace = false;
     }
     int _id;
     unsigned long _clk;
@@ -40,6 +41,7 @@ class trace_entry{
     unsigned long _src1;
     unsigned long _src2;
     bool _reset;
+    bool _end_of_trace;
     void print_all(){
       cout<<"id: "<<_id<<" clk: "<<_clk<<" pkt: "<<_pkt_id<<" dest: "<<_dest<<" src1: "<<_src1<<" src2: "<<_src2<<endl;  
     }

@@ -7,6 +7,9 @@ import numpy as np
 def configure():
   parser = argparse.ArgumentParser()
   
+  parser.add_argument('--print-each', type=int, default=100,
+                      help='Number of steps between each print. A step is 100 cycles.')
+  
   parser.add_argument('--aimmu-config', default='setup/default.cfg', 
       help='Please provide the aimmu-sim config file, default = setup/default.cfg')
   

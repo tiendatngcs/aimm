@@ -443,17 +443,17 @@ void v_map_use::create_input_n2v(){
 bool v_map_use::pim_operation_trace(int pid, unsigned long op_id, 
     unsigned long dest, unsigned long src1, unsigned long src2){
     
-  //cout<<"[VAMP] entered in VMAP pim operation trace"<<endl; 
+  // cout<<"[VAMP] entered in VMAP pim operation trace"<<endl; 
   /*
    * Operation Latency Breakdown Tracker
    */
   if(!multi_program){
     auto op_it = op_lat_breakdown_tracker[pid].find(op_id);
     if(op_it == op_lat_breakdown_tracker[pid].end()){
-      //cout<<"[VMAP] Making entry for OP: "<<op_id<<endl;
+      // cout<<"[VMAP] Making entry for OP: "<<op_id<<endl;
       op_lat_breakdown_tracker[pid].insert(make_pair(op_id,vector<unsigned long>()));
       op_lat_breakdown_tracker[pid][op_id].push_back(global_clock);
-      //cout<<"[VMAP-1] Push back for OP: "<<op_id<<" global clock: "<<global_clock<<endl;
+      // cout<<"[VMAP-1] Push back for OP: "<<op_id<<" global clock: "<<global_clock<<endl;
       //assert(op_lat_breakdown_tracker[op_id][0] == global_clock); 
     }
   }
@@ -588,7 +588,7 @@ bool v_map_use::pim_operation_trace(int pid, unsigned long op_id,
     l_cmp_net->make_entry(pid, port, l_pkt);
     success = true;
     
-    //cout<<"[VMAP] "<<"id: "<<l_pkt->id<<" vaddr: "<<dest<<" phyaddr: "<<pa_dest<<" dest cube: "<<node_dest<<endl;
+    // cout<<"[VMAP] "<<"id: "<<l_pkt->id<<" vaddr: "<<dest<<" phyaddr: "<<pa_dest<<" dest cube: "<<node_dest<<endl;
 
     //for stats analysis only
     if(!multi_program){
@@ -627,7 +627,7 @@ bool v_map_use::pim_operation_trace(int pid, unsigned long op_id,
     /***** Recording End *****/
   }
   else{
-    //cout<<"can't make entry ... @cycle"<<global_clock<<" for pid: "<<pid<<endl;
+    cout<<"can't make entry ... @cycle"<<global_clock<<" for pid: "<<pid<<endl;
     success = false;//stall the processor
   }
 

@@ -22,10 +22,12 @@ rbm::rbm(const Configuration& config, const string name) : Process(config, name)
 }
 
 bool rbm::OneCycle(){
+  // cout << "OneCycle RBM" << endl;
   while(true){
     if(_read_next==true){
       tr_entry = tr_help.get_memop();
       _op_id++;
+      // cout << "_op_id " << _op_id << endl;
     }
     if(tr_entry._reset==true){
       cout<<"[rbm] application restart | resetting all the pages and releasing all the page frames for rbm ..." <<endl;
@@ -33,7 +35,13 @@ bool rbm::OneCycle(){
       _vmu->clear_memory(get_process_id());
       tr_entry._reset = false;
     }
+    if (tr_entry._end_of_trace) {
+      // _vmu->clear_memory(get_process_id());
+      print_stats_at_end_of_trace = true;
+    }
     _read_next = _vmu->pim_operation_trace(get_process_id(), _op_id, tr_entry._dest, tr_entry._src1, tr_entry._src2);  
+
+    // cout << "OneCycle RBM loop end" << endl;
     return _read_next; 
   } 
 }

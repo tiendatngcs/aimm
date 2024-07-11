@@ -32,6 +32,7 @@ extern int link_width;
 extern bool page_miss_sig;
 extern int perceptron_id;
 extern bool print_stats_for_rollover;
+extern bool print_stats_at_end_of_trace;
 
 extern int reward;
 extern int missed_pid;//pid which got a miss and now calling agent for frame decision

@@ -1,27 +1,27 @@
 
 
 mkdir -p stats/spmv_baseline
-python sim_no_agent.py --aimmu-config setup/new_spmv_baseline.cfg | tee stats/spmv_baseline/spmv_baseline.log & 
+python sim_no_agent.py --aimmu-config setup/new_spmv_baseline.cfg --print-each 100 | tee stats/spmv_baseline/spmv_baseline.log & 
 mkdir -p stats/pagerank_baseline
-python sim_no_agent.py --aimmu-config setup/new_pagerank_baseline.cfg | tee stats/pagerank_baseline/pagerank_baseline.log & 
+python sim_no_agent.py --aimmu-config setup/new_pagerank_baseline.cfg --print-each 100 | tee stats/pagerank_baseline/pagerank_baseline.log & 
 mkdir -p stats/backprop_baseline
-python sim_no_agent.py --aimmu-config setup/new_backprop_baseline.cfg  | tee stats/backprop_baseline/backprop_baseline.log &
+python sim_no_agent.py --aimmu-config setup/new_backprop_baseline.cfg  --print-each 100 | tee stats/backprop_baseline/backprop_baseline.log &
 mkdir -p stats/rbm_baseline
-python sim_no_agent.py --aimmu-config setup/new_rbm_baseline.cfg | tee stats/rbm_baseline/rbm_baseline.log & 
+python sim_no_agent.py --aimmu-config setup/new_rbm_baseline.cfg --print-each 100 | tee stats/rbm_baseline/rbm_baseline.log & 
 mkdir -p stats/lud_baseline
-python sim_no_agent.py --aimmu-config setup/new_lud_baseline.cfg | tee stats/lud_baseline/lud_baseline.log  &
+python sim_no_agent.py --aimmu-config setup/new_lud_baseline.cfg --print-each 100 | tee stats/lud_baseline/lud_baseline.log  &
 # mkdir -p stats/mac_baseline
-# python sim_no_agent.py --aimmu-config setup/new_mac_baseline.cfg | tee stats/mac_baseline/mac_baseline.log &
+# python sim_no_agent.py --aimmu-config setup/new_mac_baseline.cfg --print-each 100 | tee stats/mac_baseline/mac_baseline.log &
 # mkdir -p stats/reduce_baseline
-# python sim_no_agent.py --aimmu-config setup/new_reduce_baseline.cfg | tee stats/reduce_baseline/reduce_baseline.log &
+# python sim_no_agent.py --aimmu-config setup/new_reduce_baseline.cfg --print-each 100 | tee stats/reduce_baseline/reduce_baseline.log &
 # mkdir -p stats/kmeans_baseline
-# python sim_no_agent.py --aimmu-config setup/new_kmeans_baseline.cfg | tee stats/kmeans_baseline/kmeans_baseline.log & 
+# python sim_no_agent.py --aimmu-config setup/new_kmeans_baseline.cfg --print-each 100 | tee stats/kmeans_baseline/kmeans_baseline.log & 
 mkdir -p stats/sgemm_baseline
-python sim_no_agent.py --aimmu-config setup/new_sgemm_baseline.cfg | tee stats/sgemm_baseline/sgemm_baseline.log &
+python sim_no_agent.py --aimmu-config setup/new_sgemm_baseline.cfg --print-each 100 | tee stats/sgemm_baseline/sgemm_baseline.log &
 # mkdir -p stats/svm_baseline
-# python sim_no_agent.py --aimmu-config setup/new_svm_baseline.cfg | tee stats/svm_baseline/svm_baseline.log &
+# python sim_no_agent.py --aimmu-config setup/new_svm_baseline.cfg --print-each 100 | tee stats/svm_baseline/svm_baseline.log &
 # mkdir -p stats/streamcluster_baseline
-# python sim_no_agent.py --aimmu-config setup/new_streamcluster_baseline.cfg | tee stats/streamcluster_baseline/streamcluster_baseline.log & 
+# python sim_no_agent.py --aimmu-config setup/new_streamcluster_baseline.cfg --print-each 100 | tee stats/streamcluster_baseline/streamcluster_baseline.log & 
 
 #============================================================================================#
 #||||||||||||||||||||||||||||||||| BNMP  ||||||||||||||||||||||||||||||||||||||||||||||||||||#

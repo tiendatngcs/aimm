@@ -106,6 +106,10 @@ bool cmp_net::can_make_entry(int pid, int port){//process is pinned to a core
     return true;
   }
   else{
+    cout << "_max_cmp_queue_size " << _max_cmp_queue_size << endl;
+    cout << "Can't make entry: port" << port << " cmp_net_queue " << _cmp_net_q[pid][port].size() << endl;
+    assert(false);
+    exit(0);
     return false;
   }
 }

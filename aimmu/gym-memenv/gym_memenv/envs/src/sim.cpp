@@ -36,6 +36,7 @@ int missed_pid = -1;//pid which got a miss and now calling agent for frame decis
 unsigned long missed_vaddr = 0;//virtual address of the missed page ... the page number!!
 unsigned long vmap_wrong_cube_incident = 0;
 bool print_stats_for_rollover = false;
+bool print_stats_at_end_of_trace = false;
 bool increase_training_rate = false;
 bool decrease_training_rate = false;
 bool flip_dest_node = false;
@@ -400,14 +401,15 @@ Sim::~Sim(){}
  */
 
 vector<double> Sim::run_gen(long epoch_length){
+  // cout << "Call run gen" << endl;
   long num_op = 0;
   long mig_not_completed = 0;
   long sleep_time = 0;
   long mig_num = 0;
   long elapsed_clk = 0;
   int pid = -1;
-  page_access_count_epochwise.clear();
   do{
+    // cout << "Cycle loop" << endl;
     /*
      * Simulating processor pipeline for all the cores for one cycle
      */
@@ -441,34 +443,34 @@ vector<double> Sim::run_gen(long epoch_length){
       if(!sleep && migration_completion_check[p]==0){
         assert(cores[p].pt!=nullptr);
         if(cores[p].pt!=nullptr && cores[p].pt->ReadyToRun(global_clock) && rand()%_injection_rate==0){
-          //cout<<"[SIM] going to execute one cycle ... for: "<<cores[p].pt->get_process_name()<<endl;
+          // cout<<"[SIM] going to execute one cycle ... for: "<<cores[p].pt->get_process_name()<<endl;
           if(cores[p].pt->OneCycle()){//true means scheduled
             num_op++;
             _num_ops_per_proc[p]++;
-            //cout<<"[SIM] one cycle done for process: "<<p<<endl;
+            // cout<<"[SIM] one cycle done for process: "<<p<<endl;
           }
           else{
-            //cout<<"[SIM] stall time ... "<<endl;
+            cout<<"[SIM] stall time ... "<<endl;
             stats_processor_stall_cycles++;//counting processor stall cycles
           }
         }
         else{
-          //cout<<"[SIM] core is not ready or null ..."<<endl;
+          cout<<"[SIM] core is not ready or null ..."<<endl;
         }
       }
       else if(migration_completion_check[p]!=0){
         mig_not_completed++;
-        //cout<<"Migration not complete ... "<<mig_not_completed<<endl;
+        cout<<"Migration not complete ... "<<mig_not_completed<<endl;
         stats_migration_not_complete_time[p]++;
         mig_num = migration_completion_check[p];
       }
       else if(sleep){
         sleep_time++;
         stats_tot_sleep_time[p]++;
-        //cout<<"Process "<<pid<<" sleeing ... "<<stats_tot_sleep_time[p]<<endl;
+        cout<<"Process "<<pid<<" sleeing ... "<<stats_tot_sleep_time[p]<<endl;
       }
     }
-    //cout<<"[SIM] cycle done for the processors ..."<<endl;
+    // cout<<"[SIM] cycle done for the processors ..."<<endl;
     /* 
      * One step for the cmp network
      */ 
@@ -477,22 +479,22 @@ vector<double> Sim::run_gen(long epoch_length){
      * one step for Memory Management Unit
      */
     is_done = is_done || _mmu->step();//returns true when the application ends
-    //cout<<"[SIM] one step mmu doen ..."<<endl; 
+    // cout<<"[SIM] one step mmu doen ..."<<endl; 
     /*
      * one step for Direct Memory Access
      */
     _dma->step();
-    //cout<<"[SIM] one step dma doen ..."<<endl; 
+    // cout<<"[SIM] one step dma doen ..."<<endl; 
     /*
      * one step for Memory Controller and then
      */
     _mc->step();
-    //cout<<"[SIM] one step mc doen ..."<<endl; 
+    // cout<<"[SIM] one step mc doen ..."<<endl; 
     /*
      * One step in the Memory Network
      */
     _m_net->step();
-    //cout<<"[SIM] one step m_net doen ..."<<endl; 
+    // cout<<"[SIM] one step m_net doen ..."<<endl; 
 
     /*
      * Global clock should be incremented only in one place
@@ -561,18 +563,17 @@ vector<double> Sim::run_gen(long epoch_length){
       }
     } else if (_periodic_break) {
       if(elapsed_clk >= epoch_length){
-        // only run one program at a time
-        assert(_total_processes == 1);
-        assert(cores[0].pt!=nullptr);
-        stats_total_active_pages = cores[0].pt->count_active_pages();
-        stats_num_pages_accessed_last_epoch = page_access_count_epochwise.size();
         num_epoch++;
         break;
+      }
+      if(print_stats_at_end_of_trace) {
+        collect_individual_stats(pid);
       }
     }
     else{
       // runs until the end
       if(print_stats_for_rollover){
+          collect_individual_stats(pid);
         cout<<"[SIM] Printing stats after rollover ..."<<endl;
         print_stats_for_rollover = false;
         //print_stats(_bench);
@@ -581,15 +582,15 @@ vector<double> Sim::run_gen(long epoch_length){
           //drain_remaining_packets();
           cout<<"\n[SIM] END OF SIMULATION (Trace Fnished | No rollover)\n"<<endl;
           print_stats(_bench);
-          collect_individual_stats(pid);
           assert(0 && "We should drain here ...");
           exit(0);//destructors won't be invoked //FIXIT //TODO
         }
       }
     }
+    // cout << "Ran one step" << endl;
   }while(num_proc_finished < _total_processes && global_clock<100000000000);//processes will be done !!!
   
-  call_learning++; 
+  if (!_disable_training) call_learning++; 
   // cout<<"========================================================== returning to agent "<<endl;
   return app_wise_opc;
 }
@@ -770,9 +771,19 @@ void Sim::create_stats_vars(){
 
 void Sim::print_stats(string benchname){
   cout<<"[SIM] printing stats ..."<<endl;
+  if (_periodic_break) {
+    // only run one program at a time
+    assert(_total_processes == 1);
+    assert(cores[0].pt!=nullptr);
+    stats_total_active_pages = cores[0].pt->count_active_pages();
+    stats_num_pages_accessed_last_epoch = page_access_count_epochwise.size();
+  }
+
   rst.update_stats();
   //rst.display_stats(benchname + ".stats");
   rst.display_stats(benchname);//used to create the benchmark folder
+
+  if (_periodic_break) page_access_count_epochwise.clear();
 }
 
 void Sim::read_runlist(string filename) {

@@ -33,6 +33,10 @@ bool pagerank::OneCycle(){
       _vmu->clear_memory(get_process_id());
       tr_entry._reset = false;
     }
+    if (tr_entry._end_of_trace) {
+      // _vmu->clear_memory(get_process_id());
+      print_stats_at_end_of_trace = true;
+    }
     _read_next = _vmu->pim_operation_trace(get_process_id(), _op_id, tr_entry._dest, tr_entry._src1, tr_entry._src2);  
     return _read_next; 
   } 
