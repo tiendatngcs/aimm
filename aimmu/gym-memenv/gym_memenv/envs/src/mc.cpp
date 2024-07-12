@@ -184,7 +184,7 @@ void MemoryController::step()
         }
       }
       else{
-        //cout<<"mcq full @cycle: "<<global_clock<<endl;
+        // cout<<"mcq full @cycle: "<<global_clock<<endl;
       }
     }
   }
@@ -205,6 +205,7 @@ void MemoryController::step()
       assert(_mcq[gPORT_SEND].front() != NULL && "Packet in step shouldn't be NULL");
       packet * l_pkt = _mcq[gPORT_SEND].front();
       bool can_inject = _m_net->can_inject(_port[gPORT_SEND], l_pkt, gNI_SEND);
+      // cout << "can_inject: " << can_inject << endl;
       if (can_inject) {
         stats_reading_from_mcq++; // TODO: string value needs to be constant
         

@@ -481,6 +481,7 @@ bool v_map_use::pim_operation_trace(int pid, unsigned long op_id,
   cmp_net *l_cmp_net = cmp_net::GetInstance();
   
   if(l_cmp_net->can_make_entry(pid, port)){
+    // cout << "Can make entry" << endl;
     stats_pim_operations++;
     packet *l_pkt = new packet;
     l_pkt->pid = pid;//recording process id
@@ -584,6 +585,20 @@ bool v_map_use::pim_operation_trace(int pid, unsigned long op_id,
     l_pkt->make_entry_pim_table = true;
     stats_total_pkts++;
     stats_total_memory_acc++;
+
+    if (src1) {
+      page_access_count_epochwise[src1 >> 11]++;
+      page_access_count_global[src1 >> 11]++;
+    }
+    if (src2) {
+      page_access_count_epochwise[src2 >> 11]++;
+      page_access_count_global[src2 >> 11]++;
+    }
+    if (dest) {
+      page_access_count_epochwise[dest >> 11]++;
+      page_access_count_global[dest >> 11]++;
+    }
+    
  
     l_cmp_net->make_entry(pid, port, l_pkt);
     success = true;
@@ -627,7 +642,7 @@ bool v_map_use::pim_operation_trace(int pid, unsigned long op_id,
     /***** Recording End *****/
   }
   else{
-    cout<<"can't make entry ... @cycle"<<global_clock<<" for pid: "<<pid<<endl;
+    // cout<<"can't make entry ... @cycle"<<global_clock<<" for pid: "<<pid<<endl;
     success = false;//stall the processor
   }
 

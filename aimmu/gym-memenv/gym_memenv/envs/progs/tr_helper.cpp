@@ -48,9 +48,7 @@ trace_entry trace_helper::get_memop(){
   bool t_empty = false;
   bool rolled_over = false;
   bool end_of_trace = false;
-  // cout << "get_memop" << endl;
   if(_trace.empty() || _vector_index == _trace.size()){
-    // cout << "Trace is empty" << endl;
     _file_num++;
     t_empty = true;
     if(_file_num>=_trace_limit){
@@ -71,11 +69,10 @@ trace_entry trace_helper::get_memop(){
     cout<<"[TRACE HELPER] file path: "<<file_path<<endl;
     read_trace(file_path);
     _vector_index = -1;
-    // cout<<"[TRACE HELPER] finished reading trace "<<file_path<<endl;
   }
+  // Dat: Return here
   _vector_index++;
   trace_entry l_te = _trace[_vector_index];
-  // l_te.print_all();
   if(rolled_over==true){
     cout << "Rolling over" << endl;
     l_te._reset = true;//TODO if rolled over, need to reset the virtual memory
@@ -83,11 +80,10 @@ trace_entry trace_helper::get_memop(){
   }
 
   if (end_of_trace){
-    cout << "End of trace" << endl;
+    // cout << "End of trace" << endl;
     l_te._end_of_trace = true;
   }
-  // cout << "Erasing index " << _vector_index << endl;
-  // cout << "Trace size " << _trace.size() << endl;
+  // buggy code here
   // _trace.erase(_trace.begin()+_vector_index);
   // cout << "Erasing finished " << endl;
   return l_te;

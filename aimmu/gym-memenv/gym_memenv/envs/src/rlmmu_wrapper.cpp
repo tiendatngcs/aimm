@@ -278,6 +278,10 @@ void wrapper_mmu::print_stats_sim(){
   S->print_stats(_config->GetStr("stats_file"));  
 }
 
+void wrapper_mmu::collect_individual_stats_sim(){
+  S->collect_individual_stats(0);  
+}
+
 int wrapper_mmu::get_num_proc(){
   return num_proc_submission; 
 }

@@ -4,6 +4,9 @@
         "iostream": "cpp",
         "bitset": "cpp",
         "chrono": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "iosfwd": "cpp",
+        "fstream": "cpp",
+        "span": "cpp"
     }
 }

@@ -23,6 +23,7 @@ backprop::backprop(const Configuration& config, const string name) : Process(con
 
 bool backprop::OneCycle(){
   while(true){
+    // loop until one cycle is finished
     if(_read_next==true){
       tr_entry = tr_help.get_memop();
       _op_id++;

@@ -22,6 +22,7 @@ pagerank::pagerank(const Configuration& config, const string name) : Process(con
 }
 
 bool pagerank::OneCycle(){
+  // Dat: ?????? useless loop here
   while(true){
     if(_read_next==true){
       tr_entry = tr_help.get_memop();//this is to backpressure when packets can not be created/injected to c_net

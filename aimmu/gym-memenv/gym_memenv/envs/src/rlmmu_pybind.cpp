@@ -18,6 +18,7 @@ PYBIND11_MODULE(rlmmu_pybind, m){
     .def("clear_trace_buffer", &wrapper_mmu::clear_trace_buffer)
     .def("get_frames_per_cube", &wrapper_mmu::get_frames_per_cube)
     .def("print_stats_sim", &wrapper_mmu::print_stats_sim)
+    .def("collect_individual_stats_sim", &wrapper_mmu::collect_individual_stats_sim)
     .def("get_migration_list", &wrapper_mmu::get_migration_list)
     .def("get_input_node2vec", &wrapper_mmu::get_input_node2vec)
     .def("send_action", &wrapper_mmu::recv_action)

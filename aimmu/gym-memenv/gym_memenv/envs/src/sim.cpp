@@ -79,6 +79,7 @@ DataCollectHook * dch_pimtab = new DataCollectHook();
 DataCollectHook * dch_active_pages = new DataCollectHook();
 unordered_map<unsigned long, unsigned long>active_pages_epochwise;
 unordered_map<unsigned long, unsigned long>page_access_count_epochwise;
+unordered_map<unsigned long, unsigned long>page_access_count_global;
 vector<map<unsigned long, PageInfo *> >page_info_map;//stores all the data regarding pages
 unordered_map<unsigned long, unsigned long>page_info_cache;//only meta data for replacment policy
 
@@ -237,12 +238,14 @@ Sim::Sim(const Configuration& config)
   string hop_avg_folder = config.GetStr("stats_file");// + "/" + config.GetStr("hop_avg_folder");  
   string hop_avg_series = config.GetStr("hop_avg_series");
   int hop_avg_freq = config.GetInt("hop_avg_freq");
+
+  _page_access_count_folder = hop_avg_folder;
   
   string mig_freq_avg_folder = config.GetStr("stats_file");// + "/" + config.GetStr("hop_avg_folder");  
   string mig_freq_avg_series = config.GetStr("mig_freq_avg_series");
   int mig_freq_avg_freq = config.GetInt("mig_freq_avg_freq");
 
-  string page_profile_info_folder_path = config.GetStr("pg_profile_folder");
+  string page_profile_info_folder_path = config.GetStr("//pg_profile_folder");
     
   pg_hist_len = config.GetInt("pg_hist_len");
   
@@ -450,7 +453,7 @@ vector<double> Sim::run_gen(long epoch_length){
             // cout<<"[SIM] one cycle done for process: "<<p<<endl;
           }
           else{
-            cout<<"[SIM] stall time ... "<<endl;
+            // cout<<"[SIM] stall time ... "<<endl;
             stats_processor_stall_cycles++;//counting processor stall cycles
           }
         }
@@ -507,6 +510,7 @@ vector<double> Sim::run_gen(long epoch_length){
     
     if(global_clock%EPOCH==0){
         print_status(num_op, sleep_time, mig_not_completed, mig_num);
+        cout << "stats_total_memory_acc: " << stats_total_memory_acc << endl;
     }
    
     
@@ -566,18 +570,23 @@ vector<double> Sim::run_gen(long epoch_length){
         num_epoch++;
         break;
       }
-      if(print_stats_at_end_of_trace) {
+      if(is_done) {
+        cout << "End of trace reached" << endl;
         collect_individual_stats(pid);
       }
     }
     else{
+      if(is_done) {
+        cout << "End of trace reached" << endl;
+        collect_individual_stats(pid);
+      }
       // runs until the end
       if(print_stats_for_rollover){
-          collect_individual_stats(pid);
         cout<<"[SIM] Printing stats after rollover ..."<<endl;
         print_stats_for_rollover = false;
-        //print_stats(_bench);
-        //collect_individual_stats(pid);
+        print_stats(_bench);
+        collect_individual_stats(pid);
+        exit(0);
         if(_no_roll_over){
           //drain_remaining_packets();
           cout<<"\n[SIM] END OF SIMULATION (Trace Fnished | No rollover)\n"<<endl;
@@ -611,6 +620,36 @@ void Sim::collect_individual_stats(int pid){
   dch_mig_freq->print();
   dch_pimtab->print();
   dch_active_pages->print();
+
+  // Dat: added printing code
+  time_t t = time(0);
+  struct tm * now = now = localtime(&t);
+
+  char buffer[80];
+  strftime(buffer, 80,"%S-%M-%H-%d-%m-%Y", now);
+
+  string _full_path = "stats/" + _page_access_count_folder + "/" + "page_access_count_" + buffer + ".pg";
+  print_page_access_summary(_full_path);
+}
+
+void Sim::print_page_access_summary(string file_path){
+   ofstream _target_file;
+   _target_file.open(file_path, ios_base::out);
+   cout<<"Printing page access ..."<<endl;
+   if(!_target_file.is_open()){
+    cout<<"file "<< file_path <<" is not open ..."<<endl;
+    assert(0);
+   }
+   else{
+    cout<<"file "<< file_path <<" is open ..."<<endl;
+    for(auto it = page_access_count_global.begin(); it!=page_access_count_global.end(); it++){
+      //cout<<it->first<<","<<it->second<<""<<endl;
+      _target_file<<it->first;
+      _target_file<<",";
+      _target_file<<it->second<<endl;;
+    } 
+   }
+   _target_file.close();
 }
 
 void Sim::_prep_epoch_params(long elapsed_clk, long num_op){
@@ -771,7 +810,7 @@ void Sim::create_stats_vars(){
 
 void Sim::print_stats(string benchname){
   cout<<"[SIM] printing stats ..."<<endl;
-  if (_periodic_break) {
+  if (_disable_training) {
     // only run one program at a time
     assert(_total_processes == 1);
     assert(cores[0].pt!=nullptr);
@@ -783,7 +822,7 @@ void Sim::print_stats(string benchname){
   //rst.display_stats(benchname + ".stats");
   rst.display_stats(benchname);//used to create the benchmark folder
 
-  if (_periodic_break) page_access_count_epochwise.clear();
+  // if (_disable_training) page_access_count_epochwise.clear();
 }
 
 void Sim::read_runlist(string filename) {

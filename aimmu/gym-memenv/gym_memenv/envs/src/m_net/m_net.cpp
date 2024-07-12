@@ -533,14 +533,20 @@ bool MemoryNetwork::can_inject(int node, packet *pkt, int NI_id){
   bool can_inject = false;
   bool can_inject_pim = true;
   if(pkt->pim_operation){
+    // cout << "is pim op" << endl;
     can_inject = (node_list[node].return_vc_req_NI_buff_size(NI_id, pkt) 
       < node_list[node].return_max_entry_vc_r_s());  
+    // cout << "can_inject: " << can_inject << endl;
     if(pkt->dest==node){
-      can_inject_pim = (node_list[node].return_num_pim_entries_reserved() < _pim_tab_size/1.1);   
+      // cout << "dst is current node" << endl;
+      can_inject_pim = (node_list[node].return_num_pim_entries_reserved() < _pim_tab_size/1.1);
+      // cout << "can_inject_pim: " << can_inject_pim << " node: " << node 
+      // <<  " _pim_tab_occupancy: " << node_list[node].return_num_pim_entries_reserved() << " _pim_tab_size: " << _pim_tab_size << endl;
     }
     return can_inject && can_inject_pim;
   }
   else{
+    // cout << "is not pim op" << endl;
     return (node_list[node].return_vc_req_NI_buff_size(NI_id, pkt) 
       < node_list[node].return_max_entry_vc_r_s()); 
   }
@@ -645,6 +651,7 @@ void MemoryNetwork::step(){
     
     dch_active_pages->collect(to_string(active_pages_epochwise.size()));
     active_pages_epochwise.clear();
+    page_access_count_epochwise.clear();
   }
 
   for(int node=0;node<num_nodes;node++){

@@ -181,5 +181,5 @@ SynthConfig::SynthConfig()
   /*************************************************/
   /*         Page Profiled/Prediction info         */
   /*************************************************/
-  _str_map["pg_profile_folder"] = "tests/pg_reuse_pred/input/"; 
+  _str_map["//pg_profile_folder"] = "tests/pg_reuse_pred/input/"; 
 }

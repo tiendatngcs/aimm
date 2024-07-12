@@ -55,6 +55,7 @@ packet * cmp_net::_handle_pei_req(int pid, int port){
       //cout<<"[PEI] accessed the cache ... hit? "<<hit<<endl;
       if(hit){
         _cmp_net_q[pid][port].erase(_cmp_net_q[pid][port].begin()+i);
+        cout << "Dequeue cmp net q" << endl;
         return pkt;
       }
       else{//miss in cache
@@ -67,6 +68,7 @@ packet * cmp_net::_handle_pei_req(int pid, int port){
             _mshr->make_entry(pkt);
             _make_entry_read_request_queue(pkt);//this will be checked in each step
             _cmp_net_q[pid][port].erase(_cmp_net_q[pid][port].begin()+i);
+            cout << "Dequeue cmp net q" << endl;
           }
           else{
             //try again later
@@ -106,10 +108,10 @@ bool cmp_net::can_make_entry(int pid, int port){//process is pinned to a core
     return true;
   }
   else{
-    cout << "_max_cmp_queue_size " << _max_cmp_queue_size << endl;
-    cout << "Can't make entry: port" << port << " cmp_net_queue " << _cmp_net_q[pid][port].size() << endl;
-    assert(false);
-    exit(0);
+    // cout << "_max_cmp_queue_size " << _max_cmp_queue_size << endl;
+    // cout << "Can't make entry: port" << port << " cmp_net_queue " << _cmp_net_q[pid][port].size() << endl;
+    // assert(false);
+    // exit(0);
     return false;
   }
 }
@@ -165,6 +167,7 @@ packet * cmp_net::read_entry(int pid, int port){//TODO: do we need arbitration h
        packet* l_pkt = _cmp_net_q[pid][port].front();
        assert(l_pkt!=NULL && "A valid packet can not be NULL");
        _cmp_net_q[pid][port].pop_front();
+      //  cout << "Poping _cmp_net_q current size: " << _cmp_net_q[pid][port].size() << endl;
        return l_pkt;
      }
      else{

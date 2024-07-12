@@ -73,6 +73,7 @@ class Sim
     
     void load_pg_usage_map(string, int, int);//page access info into a global map
     void collect_individual_stats(int);
+    void print_page_access_summary(string file_path);
 
   private:
 
@@ -124,6 +125,7 @@ class Sim
     int _total_processes;
     reg_stats rst;
     string _trace_folder;
+    string _page_access_count_folder;
     vector<double>_a_epoch_params;
     string _bench;
 

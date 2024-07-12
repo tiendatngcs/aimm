@@ -330,7 +330,6 @@ unsigned long long vir2phy::GetPhyAddr(int pid, unsigned long long virAddr){
   Physical_address = 0;  
   
   stats_v2p_mem_acc++;
-  page_access_count_epochwise[virAddr >> 11]++;
 
     int PML_index = (virAddr>>38) & 0x1FF;//should give us 47:39
 #ifdef DEBUG_PRINT_V2P

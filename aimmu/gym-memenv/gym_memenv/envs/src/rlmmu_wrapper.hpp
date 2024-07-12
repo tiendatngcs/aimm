@@ -25,6 +25,7 @@ class wrapper_mmu{
     void clear_trace_buffer();
     unsigned long get_frames_per_cube();
     void print_stats_sim();
+    void collect_individual_stats_sim();
     vector<vector<tuple<double, double, double> > >get_migration_list(vector<vector<unsigned long> >&);
     vector<vector<tuple<double, double, double> > >get_hop_profile();
     int get_num_proc();

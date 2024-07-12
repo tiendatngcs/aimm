@@ -20,6 +20,8 @@ MemoryManagementUnit::~MemoryManagementUnit(){}
 bool MemoryManagementUnit::step(){
   bool is_done = false;
   #pragma omp parallel for num_threads(8) collapse(2)
+  // cout << "num_proc_submission: " << num_proc_submission << endl;
+  assert(num_proc_submission == 1);
   for(int proc=0; proc < num_proc_submission; proc++){
     if(_vmu_map[proc]->is_done()){
       is_done = true;

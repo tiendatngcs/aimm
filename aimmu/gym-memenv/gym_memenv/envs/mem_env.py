@@ -223,14 +223,22 @@ class MemEnv(gym.Env):
     self.obj = rlmmu_pybind.wrapper_mmu(args.aimmu_config)
     self.FeatureExt = FeatureExtract(args)
     epoch_count = 0
-    while (True):
+    while (not self.obj.finished()):
+    # while (True):
       # run 256 trace step
+      # print(self.action_space.n)
+      self.obj.send_action([0])
       self.obj.run()
       epoch_count+=1
       if (epoch_count % print_each == 0):
         # print("--------->>>> Printing stats")
-        self.print_stats()
+        # self.print_stats()
+        pass
       # print("inf loop")
+    
+    print("Finished")
+    # self.obj.collect_individual_stats_sim()
+    # self.print_stats()
 
   def reset(self):
     print("xxxxxxxxxxxxxxxxxxxxxxxxxx RESETING ALL THE STATES XXXXXXXXXXXXXXXXXXXXXXXX")
