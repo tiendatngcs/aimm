@@ -245,7 +245,7 @@ Sim::Sim(const Configuration& config)
   string mig_freq_avg_series = config.GetStr("mig_freq_avg_series");
   int mig_freq_avg_freq = config.GetInt("mig_freq_avg_freq");
 
-  string page_profile_info_folder_path = config.GetStr("//pg_profile_folder");
+  string page_profile_info_folder_path = config.GetStr("pg_profile_folder");
     
   pg_hist_len = config.GetInt("pg_hist_len");
   

@@ -70,7 +70,13 @@ trace_entry trace_helper::get_memop(){
     read_trace(file_path);
     _vector_index = -1;
   }
-  // Dat: Return here
+  
+  if (end_of_trace) {
+    trace_entry l_te = trace_entry();
+    l_te._end_of_trace = true;
+    return l_te; 
+  }
+
   _vector_index++;
   trace_entry l_te = _trace[_vector_index];
   if(rolled_over==true){
@@ -79,10 +85,10 @@ trace_entry trace_helper::get_memop(){
                         //TODO also need to free the frames in the physical memory
   }
 
-  if (end_of_trace){
-    // cout << "End of trace" << endl;
-    l_te._end_of_trace = true;
-  }
+  // if (end_of_trace){
+  //   // cout << "End of trace" << endl;
+  //   l_te._end_of_trace = true;
+  // }
   // buggy code here
   // _trace.erase(_trace.begin()+_vector_index);
   // cout << "Erasing finished " << endl;
