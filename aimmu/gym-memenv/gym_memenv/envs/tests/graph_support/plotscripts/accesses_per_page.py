@@ -1,6 +1,6 @@
 import numpy as np
 
-path = "/home/pritam/aimmu_project/aimmu/gym-memenv/gym_memenv/envs/tests/pg_reuse_pred/input/"
+path = "/home/grads/t/tiendat.ng.cs/github_repos/aimm/aimmu/gym-memenv/gym_memenv/envs/tests/pg_reuse_pred/input/"
 
 benchfiles = [
     'backprop.pg',
@@ -13,6 +13,9 @@ benchfiles = [
     'streamcluster.pg',
     'sgemm.pg',
     'spmv.pg']
+
+# path = "/home/grads/t/tiendat.ng.cs/github_repos/aimm/aimmu/gym-memenv/gym_memenv/envs/stats/pagerank_baseline/"
+# benchfiles = ["page_access_count_59-51-15-12-07-2024.pg"]
 
 
 category = {}

@@ -72,6 +72,7 @@ trace_entry trace_helper::get_memop(){
   }
   
   if (end_of_trace) {
+    cout << "End of trace" << endl;
     trace_entry l_te = trace_entry();
     l_te._end_of_trace = true;
     return l_te; 

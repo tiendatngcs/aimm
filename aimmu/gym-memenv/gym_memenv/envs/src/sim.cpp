@@ -80,6 +80,7 @@ DataCollectHook * dch_active_pages = new DataCollectHook();
 unordered_map<unsigned long, unsigned long>active_pages_epochwise;
 unordered_map<unsigned long, unsigned long>page_access_count_epochwise;
 unordered_map<unsigned long, unsigned long>page_access_count_global;
+string _page_access_count_folder;
 vector<map<unsigned long, PageInfo *> >page_info_map;//stores all the data regarding pages
 unordered_map<unsigned long, unsigned long>page_info_cache;//only meta data for replacment policy
 
@@ -239,7 +240,7 @@ Sim::Sim(const Configuration& config)
   string hop_avg_series = config.GetStr("hop_avg_series");
   int hop_avg_freq = config.GetInt("hop_avg_freq");
 
-  _page_access_count_folder = hop_avg_folder;
+  _page_access_count_folder = opc_avg_folder;
   
   string mig_freq_avg_folder = config.GetStr("stats_file");// + "/" + config.GetStr("hop_avg_folder");  
   string mig_freq_avg_series = config.GetStr("mig_freq_avg_series");
@@ -570,15 +571,17 @@ vector<double> Sim::run_gen(long epoch_length){
         num_epoch++;
         break;
       }
-      if(is_done) {
+      if(print_stats_at_end_of_trace) {
         cout << "End of trace reached" << endl;
         collect_individual_stats(pid);
+        exit(0);
       }
     }
     else{
-      if(is_done) {
+      if(print_stats_at_end_of_trace) {
         cout << "End of trace reached" << endl;
         collect_individual_stats(pid);
+        exit(0);
       }
       // runs until the end
       if(print_stats_for_rollover){
@@ -622,6 +625,7 @@ void Sim::collect_individual_stats(int pid){
   dch_active_pages->print();
 
   // Dat: added printing code
+  cout << "Printing page_access_count: ..." << endl;
   time_t t = time(0);
   struct tm * now = now = localtime(&t);
 

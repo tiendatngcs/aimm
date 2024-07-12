@@ -125,9 +125,9 @@ class Sim
     int _total_processes;
     reg_stats rst;
     string _trace_folder;
-    string _page_access_count_folder;
     vector<double>_a_epoch_params;
     string _bench;
+    // string _page_access_count_folder;
 
     DataCollectHook *_dch_1;//collecting avg ipc
     DataCollectHook *_dch_2;//collecting avg hop

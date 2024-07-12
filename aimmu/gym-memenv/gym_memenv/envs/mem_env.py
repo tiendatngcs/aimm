@@ -237,7 +237,7 @@ class MemEnv(gym.Env):
       # print("inf loop")
     
     print("Finished")
-    # self.obj.collect_individual_stats_sim()
+    self.obj.collect_individual_stats_sim()
     # self.print_stats()
 
   def reset(self):
