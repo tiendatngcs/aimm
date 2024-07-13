@@ -80,6 +80,7 @@ DataCollectHook * dch_active_pages = new DataCollectHook();
 unordered_map<unsigned long, unsigned long>active_pages_epochwise;
 unordered_map<unsigned long, unsigned long>page_access_count_epochwise;
 unordered_map<unsigned long, unsigned long>page_access_count_global;
+unordered_map<unsigned long, unsigned long>last_access_epoch;
 string _page_access_count_folder;
 vector<map<unsigned long, PageInfo *> >page_info_map;//stores all the data regarding pages
 unordered_map<unsigned long, unsigned long>page_info_cache;//only meta data for replacment policy
@@ -404,7 +405,7 @@ Sim::~Sim(){}
  * multiple of number of hops and total buffer in each of the nodes on the way.
  */
 
-vector<double> Sim::run_gen(long epoch_length){
+vector<double> Sim::run_gen(long step_length){
   // cout << "Call run gen" << endl;
   long num_op = 0;
   long mig_not_completed = 0;
@@ -539,7 +540,7 @@ vector<double> Sim::run_gen(long epoch_length){
     }
     
     if(!_disable_training){ 
-      if(elapsed_clk > epoch_length){
+      if(elapsed_clk > step_length){
         num_epoch++;
         if(_warmup_cycle < global_clock){
           break;
@@ -567,7 +568,7 @@ vector<double> Sim::run_gen(long epoch_length){
         break;
       }
     } else if (_periodic_break) {
-      if(elapsed_clk >= epoch_length){
+      if(elapsed_clk >= step_length){
         num_epoch++;
         break;
       }

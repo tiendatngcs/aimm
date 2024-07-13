@@ -225,7 +225,7 @@ class MemEnv(gym.Env):
     epoch_count = 0
     while (not self.obj.finished()):
     # while (True):
-      # run 256 trace step
+      # run 256 cycles
       # print(self.action_space.n)
       self.obj.send_action([0])
       self.obj.run()

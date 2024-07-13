@@ -1,21 +1,22 @@
 import numpy as np
 
-path = "/home/grads/t/tiendat.ng.cs/github_repos/aimm/aimmu/gym-memenv/gym_memenv/envs/tests/pg_reuse_pred/input/"
+# path = "/home/grads/t/tiendat.ng.cs/github_repos/aimm/aimmu/gym-memenv/gym_memenv/envs/tests/pg_reuse_pred/input/"
 
-benchfiles = [
-    'backprop.pg',
-    'lud.pg',
-    'kmeans.pg',
-    'naive_art_mac.pg',
-    'pagerank.pg',
-    'rbm.pg',
-    'naive_art_reduce.pg',
-    'streamcluster.pg',
-    'sgemm.pg',
-    'spmv.pg']
+# benchfiles = [
+#     'backprop.pg',
+#     'lud.pg',
+#     'kmeans.pg',
+#     'naive_art_mac.pg',
+#     'pagerank.pg',
+#     'rbm.pg',
+#     'naive_art_reduce.pg',
+#     'streamcluster.pg',
+#     'sgemm.pg',
+#     'spmv.pg']
 
 # path = "/home/grads/t/tiendat.ng.cs/github_repos/aimm/aimmu/gym-memenv/gym_memenv/envs/stats/pagerank_baseline/"
-# benchfiles = ["page_access_count_59-51-15-12-07-2024.pg"]
+path = "/home/grads/t/tiendat.ng.cs/github_repos/aimm/aimmu/gym-memenv/gym_memenv/envs/tests/pg_reuse_pred/affinity_folder2/"
+benchfiles = ["pagerank.pg"]
 
 
 category = {}

@@ -191,6 +191,7 @@ extern vector<double>app_wise_opc;
 extern unordered_map<unsigned long, unsigned long>active_pages_epochwise;
 extern unordered_map<unsigned long, unsigned long>page_access_count_epochwise;
 extern unordered_map<unsigned long, unsigned long>page_access_count_global;
+extern unordered_map<unsigned long, unsigned long>last_access_epoch;
 extern string _page_access_count_folder;
 
 extern unsigned long stats_possible_cand_list_empty;

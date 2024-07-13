@@ -429,7 +429,7 @@ void trace_helper::affinity_analysis(){
 void trace_helper::record_pg_uasge(){
   while(1){
     bool t_empty = false;
-    if(_trace.empty()){
+    if(_trace.empty() || _vector_index == _trace.size()){
       _file_num++;
       t_empty = true;
       if(_file_num > _trace_limit){
@@ -460,8 +460,9 @@ void trace_helper::record_pg_uasge(){
    _record_connection_access(src1, dest); 
    _record_connection_access(src2, dest); 
 
-
-    _trace.erase(_trace.begin()+_vector_index);
+    // cout << "_vector_index " << _vector_index << "Trace size " << _trace.size() << endl;
+    // assert(_vector_index < _trace.size());
+    // _trace.erase(_trace.begin()+_vector_index);
   }
 }
 

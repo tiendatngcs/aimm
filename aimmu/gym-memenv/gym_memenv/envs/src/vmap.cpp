@@ -598,6 +598,21 @@ bool v_map_use::pim_operation_trace(int pid, unsigned long op_id,
       page_access_count_epochwise[dest >> 11]++;
       page_access_count_global[dest >> 11]++;
     }
+
+    if (global_clock % 10000 == 0) {
+      unsigned long epoch = global_clock / 10000;
+      if (src1) {
+        last_access_epoch[src1 >> 11]++;
+      }
+      if (src2) {
+        last_access_epoch[src2 >> 11]++;
+      }
+      if (dest) {
+        last_access_epoch[dest >> 11]++;
+      }
+    }
+
+
     
  
     l_cmp_net->make_entry(pid, port, l_pkt);

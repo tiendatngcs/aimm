@@ -49,26 +49,28 @@ void DataCollectHook::set_params(string folder, string file_name, unsigned long 
 }
 
 void DataCollectHook::collect(string data){
-  _file.open(_full_path, ios_base::app); 
-  if(_intv < _r_intv){
-    _data_list.push_back(data);
-    _intv++; 
-  }
-  else{
+  // if(_intv < _r_intv){
+  //   _data_list.push_back(data);
+  //   // _intv++;
+  //   _intv += 1000; 
+  // }
+  // else{
+    _file.open(_full_path, ios_base::app); 
     if(!_file.is_open()){
       cout<<"file "<< _full_path <<"is not open ..."<<endl;
       assert(0);
     }
     else{
-      for(int i=0; i<_data_list.size(); i++){
-        _file<<_data_list[i];
-        _file<<",";
-      }
-      _data_list.clear();
+      // for(int i=0; i<_data_list.size(); i++){
+      //   _file<<_data_list[i];
+      _file<<data;
+      _file<<",";
+      // }
+      // _data_list.clear();
     }
-  _intv=0;
-  }
-  _file.close();
+    _intv=0;
+    _file.close();
+  // }
 }
 
 /*
