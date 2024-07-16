@@ -5,5 +5,5 @@
 *.so
 *.log
 *.op
-
 **/stats/**/*.csv
+last_access*

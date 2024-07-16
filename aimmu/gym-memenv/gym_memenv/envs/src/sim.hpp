@@ -64,6 +64,7 @@ class Sim
     /*************************************************/
     void print_stats(string benchname);
     void print_status(long, long, long, long);
+    void print_last_access(string benchname);
     /*
      * @brief draining remaining packets in the network. It should be called at the end of the simulation.
      */

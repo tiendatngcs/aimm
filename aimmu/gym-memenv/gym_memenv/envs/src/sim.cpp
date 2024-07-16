@@ -2,6 +2,8 @@
 #include <bits/stdc++.h>
 
 const int EPOCH=10000;
+const int PRINT_INTERVAL = 100000; //Dat:
+const int PRINT_INTERVAL_SGEMM = 10000; //Dat:
 unsigned long PrevGlobalClock = 0;
 unsigned long LastEpochCycle = 0;
 long num_epoch = 1;
@@ -568,6 +570,17 @@ vector<double> Sim::run_gen(long step_length){
         break;
       }
     } else if (_periodic_break) {
+      if (_bench == "sgemm_baseline") {
+        if ((global_clock + 1) % PRINT_INTERVAL_SGEMM == 0) {
+          // we are at the end of an interval/epoch, print for the current(last) interval
+          print_last_access(_bench);
+        }
+      } else {
+        if ((global_clock + 1) % PRINT_INTERVAL == 0) {
+          // we are at the end of an interval/epoch, print for the current(last) interval
+          print_last_access(_bench);
+        }
+      }
       if(elapsed_clk >= step_length){
         num_epoch++;
         break;
@@ -579,6 +592,9 @@ vector<double> Sim::run_gen(long step_length){
       }
     }
     else{
+      if ((global_clock + 1) % PRINT_INTERVAL == 0) {
+        print_last_access(_bench);
+      }
       if(print_stats_at_end_of_trace) {
         cout << "End of trace reached" << endl;
         collect_individual_stats(pid);
@@ -828,6 +844,24 @@ void Sim::print_stats(string benchname){
   rst.display_stats(benchname);//used to create the benchmark folder
 
   // if (_disable_training) page_access_count_epochwise.clear();
+}
+
+void Sim::print_last_access(string benchname) {
+  unsigned long epoch = global_clock / EPOCH;
+  string file_name = "stats/" + benchname + "/last_access-" + to_string(epoch) + ".pg";
+
+  FILE* file = fopen(file_name.c_str(), "w");
+  if (!file) {
+    cout << "File " + file_name + " cannot be created" << endl;
+    exit(0);
+  }
+  for(auto it = last_access_epoch.begin(); it!=last_access_epoch.end(); it++){
+    // cout<<it->first<<","<<it->second<<""<<endl;
+    // string content = to_string(it->first) + "," + to_string(it->second) + "\n";
+    fprintf(file, "%lu,%lu\n", it->first, it->second);
+  }
+  cout<<"finished writing in the last access stats file ..."<<endl;
+  fclose(file);
 }
 
 void Sim::read_runlist(string filename) {
